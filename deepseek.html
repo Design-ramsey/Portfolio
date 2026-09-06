@@ -1,0 +1,1944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WORK_NO:1 | Portfolio</title>
+    <style>
+        :root {
+            --section-bg: #808080;
+            --text-color: #fff;
+            --muted-color: #eee;
+            --link-color: #fff;
+            --accent-color: #fff;
+            --accent-rgb: 255, 255, 255;
+            --accent-contrast: #111;
+            --nav-height: 4.5rem;
+            --footer-height: 4rem;
+            --transition-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+            --font-display: 'Google Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            --font-body: 'Lora', Georgia, 'Times New Roman', serif;
+            --z-nav: 100;
+            --z-footer: 90;
+            --z-gallery-ui: 20;
+            --z-progress: 110;
+        }
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        html::-webkit-scrollbar {
+            display: none;
+        }
+
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: var(--section-bg);
+            color: var(--text-color);
+            font-family: var(--font-body);
+            transition: background-color 0.6s var(--transition-smooth), color 0.45s var(--transition-smooth);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ── Skip Link ── */
+        .skip-link {
+            position: fixed;
+            top: -100%;
+            left: 1rem;
+            z-index: 200;
+            padding: 0.75rem 1.5rem;
+            background: var(--accent-color);
+            color: var(--accent-contrast);
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-decoration: none;
+            transition: top 0.3s var(--transition-smooth);
+            pointer-events: auto;
+        }
+        .skip-link:focus-visible {
+            top: 1rem;
+        }
+
+        /* ── Scroll Progress Bar ── */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            z-index: var(--z-progress);
+            background: linear-gradient(90deg, var(--accent-color), var(--text-color));
+            transition: width 0.15s ease-out;
+            pointer-events: none;
+            border-radius: 0 999px 999px 0;
+        }
+
+        /* ── Typography ── */
+        h1,
+        h2,
+        h3,
+        p,
+        a,
+        li,
+        button {
+            color: var(--text-color);
+            font-family: inherit;
+        }
+
+        h1 {
+            font-weight: 800;
+            font-size: clamp(2rem, 5.5vw, 4rem);
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+            position: relative;
+            z-index: 3;
+            font-family: var(--font-display);
+            text-wrap: balance;
+        }
+
+        a {
+            color: var(--link-color);
+            text-decoration: none;
+            position: relative;
+            transition: color 0.35s, opacity 0.3s;
+            -webkit-tap-highlight-color: transparent;
+        }
+        a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 0;
+            height: 2px;
+            border-radius: 999px;
+            background: var(--accent-color);
+            transition: width 0.3s var(--transition-smooth), background-color 0.35s;
+        }
+        a:hover::after,
+        a:focus-visible::after {
+            width: 100%;
+        }
+        a:hover,
+        a:focus-visible {
+            opacity: 0.85;
+            outline: none;
+        }
+
+        /* ── Navigation ── */
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: var(--nav-height);
+            padding: 0 clamp(1.25rem, 4vw, 4rem);
+            width: 100%;
+            z-index: var(--z-nav);
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            background: linear-gradient(180deg, color-mix(in srgb, var(--section-bg) 75%, transparent) 0%, transparent 100%);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: background-color 0.6s var(--transition-smooth);
+        }
+        .navigation>* {
+            pointer-events: auto;
+        }
+        .nav-brand {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            opacity: 0.9;
+            white-space: nowrap;
+        }
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: clamp(1rem, 2.5vw, 2.5rem);
+            list-style: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            font-family: var(--font-display);
+        }
+        .nav-links a {
+            padding: 0.4rem 0.2rem;
+            font-size: 0.85rem;
+            letter-spacing: 0.04em;
+        }
+        .nav-socials {
+            font-size: 0.75em;
+            display: inline-flex;
+            gap: 1.2rem;
+            list-style: none;
+            font-family: var(--font-display);
+        }
+        .nav-socials a {
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        /* Mobile Menu Toggle */
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            pointer-events: auto;
+            z-index: 120;
+        }
+        .nav-toggle span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--text-color);
+            border-radius: 999px;
+            transition: transform 0.35s var(--transition-smooth), opacity 0.3s;
+        }
+        .nav-toggle[aria-expanded="true"] span:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+        .nav-toggle[aria-expanded="true"] span:nth-child(2) {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+        .nav-toggle[aria-expanded="true"] span:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
+        /* ── Main Container ── */
+        .container {
+            height: 100vh;
+            width: 100%;
+            overflow-y: auto;
+            overflow-x: hidden;
+            position: relative;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+            background: var(--section-bg);
+            transition: background-color 0.6s var(--transition-smooth);
+            overscroll-behavior-y: contain;
+        }
+
+        /* ── Sections ── */
+        .section {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            height: 100vh;
+            width: 100%;
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+            position: relative;
+            overflow: hidden;
+            isolation: isolate;
+            background: var(--section-bg);
+            color: var(--text-color);
+            transition: background-color 0.6s var(--transition-smooth), color 0.45s var(--transition-smooth);
+            contain: layout paint;
+            content-visibility: auto;
+            contain-intrinsic-size: 100vh;
+        }
+        .section:focus-visible {
+            outline: 2px solid var(--accent-color);
+            outline-offset: -4px;
+        }
+
+        .section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: color-mix(in srgb, var(--section-bg) 15%, transparent);
+            opacity: 0.35;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* ── Transition Content ── */
+        .transition-content {
+            width: min(1000px, 90vw);
+            height: min(650px, 75vh);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            gap: clamp(1rem, 3vh, 2rem);
+            opacity: 1;
+            transform: translateY(40px) scale(0.93);
+            filter: saturate(0.78) brightness(0.58);
+            transition: transform 0.78s var(--transition-smooth), filter 0.78s var(--transition-smooth), opacity 0.5s;
+            will-change: transform, filter;
+            padding-top: clamp(2rem, 6vh, 4rem);
+        }
+        .transition-content.visible {
+            opacity: 1;
+            transform: none;
+            filter: saturate(1) brightness(1);
+        }
+
+        /* ── Heading ── */
+        .section-heading {
+            flex-shrink: 0;
+            text-align: center;
+            z-index: 5;
+            margin-bottom: 0.25rem;
+        }
+
+        .h1-char {
+            display: inline-block;
+            opacity: 0;
+            transform: translate3d(var(--sx), var(--sy), 0) rotate(var(--sr)) scale(0.65);
+            filter: blur(6px);
+            will-change: transform, opacity, filter;
+        }
+        .transition-content.visible .h1-char {
+            animation: assembleChar 0.55s var(--transition-smooth) forwards;
+            animation-delay: var(--delay);
+        }
+        @keyframes assembleChar {
+            0% {
+                opacity: 0;
+                transform: translate3d(var(--sx), var(--sy), 0) rotate(var(--sr)) scale(0.65);
+                filter: blur(6px);
+            }
+            55% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 1;
+                transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+                filter: blur(0);
+            }
+        }
+
+        /* ── Gallery Content ── */
+        .content {
+            width: 100%;
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            border-radius: 16px;
+            z-index: 0;
+            min-height: 0;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
+            background: color-mix(in srgb, var(--section-bg) 40%, transparent);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+        .content img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: transform 1s var(--transition-smooth), filter 0.8s var(--transition-smooth);
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+        .transition-content.visible .content img {
+            transform: scale(1.02);
+        }
+
+        /* ── Horizontal Gallery ── */
+        .horizontal-gallery {
+            position: absolute;
+            inset: 0;
+            overflow-x: auto;
+            overflow-y: hidden;
+            display: flex;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            overscroll-behavior-x: contain;
+            overscroll-behavior-y: none;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            touch-action: pan-x pan-y;
+            -webkit-overflow-scrolling: touch;
+            cursor: grab;
+            z-index: 0;
+            border-radius: 16px;
+        }
+        .horizontal-gallery:active {
+            cursor: grabbing;
+        }
+        .horizontal-gallery::-webkit-scrollbar {
+            display: none;
+        }
+        .horizontal-gallery.dragging {
+            cursor: grabbing;
+            scroll-behavior: auto;
+        }
+
+        .gallery-track {
+            display: flex;
+            height: 100%;
+            min-width: max-content;
+        }
+        .gallery-slide {
+            position: relative;
+            flex: 0 0 100%;
+            width: 100%;
+            height: 100%;
+            scroll-snap-align: center;
+            scroll-snap-stop: always;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            isolation: isolate;
+            border-radius: 16px;
+        }
+        .gallery-slide .slide-image {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+            transform: scale(var(--slide-scale, 1.075)) translate3d(var(--px, 0px), var(--py, 0px), 0);
+            opacity: var(--slide-opacity, 1);
+            filter: saturate(0.88) brightness(0.72);
+            will-change: transform, filter;
+            user-select: none;
+            pointer-events: none;
+            transition: filter 0.7s var(--transition-smooth);
+        }
+        .gallery-slide.is-active .slide-image {
+            filter: saturate(1) brightness(1);
+        }
+
+        .slide-label {
+            position: absolute;
+            left: clamp(0.75rem, 3vw, 2.5rem);
+            bottom: clamp(3.2rem, 9vh, 5.5rem);
+            z-index: 4;
+            font-size: 0.65rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            padding: 0.5rem 0.85rem;
+            border: 1px solid color-mix(in srgb, var(--text-color) 35%, transparent);
+            border-radius: 999px;
+            background: color-mix(in srgb, var(--section-bg) 40%, transparent);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            font-family: var(--font-display);
+            font-weight: 500;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        /* ── Gallery UI (Arrows + Dots) ── */
+        .gallery-ui {
+            position: absolute;
+            left: 50%;
+            bottom: clamp(1.2rem, 3.5vh, 2.5rem);
+            transform: translateX(-50%);
+            z-index: var(--z-gallery-ui);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.45rem 0.7rem;
+            border-radius: 999px;
+            background: rgba(0, 0, 0, 0.22);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+        }
+        .gallery-arrow {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-color);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            transition: background 0.3s, transform 0.3s, border-color 0.3s;
+            -webkit-tap-highlight-color: transparent;
+            flex-shrink: 0;
+            touch-action: manipulation;
+        }
+        .gallery-arrow:hover,
+        .gallery-arrow:focus-visible {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: scale(1.08);
+            outline: none;
+        }
+        .gallery-arrow:active {
+            transform: scale(0.92);
+        }
+        .gallery-arrow:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .gallery-dots {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0 0.4rem;
+        }
+        .gallery-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            border: 0;
+            padding: 0;
+            background: currentColor;
+            opacity: 0.3;
+            cursor: pointer;
+            transition: transform 0.35s var(--transition-smooth), opacity 0.35s;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+            flex-shrink: 0;
+        }
+        .gallery-dot.active {
+            opacity: 1;
+            transform: scale(1.6);
+        }
+        .gallery-dot:hover,
+        .gallery-dot:focus-visible {
+            opacity: 0.7;
+            outline: none;
+        }
+
+        .gallery-hint {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 8;
+            pointer-events: none;
+            opacity: 0.75;
+            font-size: 0.62rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            white-space: nowrap;
+            animation: galleryHint 2.2s ease-in-out infinite;
+            font-family: var(--font-display);
+            font-weight: 500;
+            color: var(--text-color);
+            text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
+        }
+        @keyframes galleryHint {
+            0%,
+            100% {
+                opacity: 0.12;
+                transform: translate(-50%, -50%) translateX(0);
+            }
+            45% {
+                opacity: 0.75;
+                transform: translate(-50%, -50%) translateX(12px);
+            }
+        }
+        .gallery-slide:first-child .gallery-hint {
+            display: block;
+        }
+        .gallery-slide:not(:first-child) .gallery-hint {
+            display: none;
+        }
+
+        /* ── Section Index ── */
+        .section-index {
+            position: absolute;
+            top: 50%;
+            right: clamp(0.6rem, 2vw, 1.5rem);
+            transform: translateY(-50%);
+            z-index: 5;
+            font-size: 0.62rem;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            opacity: 0.55;
+            font-family: var(--font-display);
+            text-transform: uppercase;
+            writing-mode: vertical-rl;
+            pointer-events: none;
+        }
+
+        /* ── Scroll Indicator ── */
+        .scroll-indicator {
+            position: absolute;
+            bottom: clamp(4.5rem, 12vh, 7rem);
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 6;
+            pointer-events: none;
+            opacity: 0.6;
+            animation: scrollPulse 2s ease-in-out infinite;
+            font-size: 0.7rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            font-family: var(--font-display);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .scroll-indicator svg {
+            width: 18px;
+            height: 18px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 1.5;
+        }
+        @keyframes scrollPulse {
+            0%,
+            100% {
+                opacity: 0.35;
+                transform: translateX(-50%) translateY(0);
+            }
+            50% {
+                opacity: 0.75;
+                transform: translateX(-50%) translateY(6px);
+            }
+        }
+        .section:last-child .scroll-indicator {
+            display: none;
+        }
+
+        /* ── Footer ── */
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            position: fixed;
+            padding: 0.8rem clamp(1.25rem, 4vw, 4rem);
+            left: 0;
+            bottom: 0;
+            z-index: var(--z-footer);
+            pointer-events: none;
+            background: linear-gradient(0deg, color-mix(in srgb, var(--section-bg) 65%, transparent) 0%, transparent 100%);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: background-color 0.6s var(--transition-smooth);
+        }
+        .footer>* {
+            pointer-events: auto;
+        }
+        .footer-list {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: clamp(1rem, 2.5vw, 2rem);
+            list-style: none;
+            font-size: 0.85rem;
+            font-weight: 400;
+            font-family: var(--font-display);
+        }
+        .footer-list a {
+            font-size: 0.8rem;
+            letter-spacing: 0.05em;
+        }
+
+        .work-button {
+            color: var(--accent-contrast);
+            background: var(--accent-color);
+            border-radius: 999px;
+            padding: 10px 20px;
+            min-width: 140px;
+            border: 1px solid rgba(var(--accent-rgb), 0.25);
+            cursor: pointer;
+            transition: transform 0.3s var(--transition-smooth), background-color 0.35s, color 0.35s, box-shadow 0.3s;
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 0.8rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        .work-button:hover,
+        .work-button:focus-visible {
+            transform: scale(1.06);
+            background: var(--text-color);
+            color: var(--section-bg);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            outline: none;
+        }
+        .work-button:active {
+            transform: scale(0.95);
+        }
+
+        .copy-right p {
+            color: var(--muted-color);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.22);
+            font-size: 0.72rem;
+            opacity: 0.75;
+            font-family: var(--font-display);
+        }
+
+        /* ── Catalog Link ── */
+        .catalog {
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            background-image: linear-gradient(90deg, var(--catalog-a, #ff8a00), var(--catalog-b, #e52e71), var(--catalog-a, #ff8a00));
+            background-size: 200% auto;
+            animation: shimmer 3s linear infinite;
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.24));
+        }
+        .catalog::after {
+            background: linear-gradient(90deg, var(--catalog-a, #ff8a00), var(--catalog-b, #e52e71));
+        }
+        @keyframes shimmer {
+            to {
+                background-position: 200% center;
+            }
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 900px) {
+            :root {
+                --nav-height: 3.75rem;
+                --footer-height: 3.25rem;
+            }
+            .navigation {
+                padding: 0 1rem;
+            }
+            .nav-links {
+                gap: 0.8rem;
+                font-size: 0.75rem;
+            }
+            .nav-links a {
+                font-size: 0.7rem;
+            }
+            .nav-socials {
+                display: none;
+            }
+            .nav-toggle {
+                display: flex;
+            }
+            .nav-links-wrapper {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: min(75vw, 320px);
+                height: 100vh;
+                background: color-mix(in srgb, var(--section-bg) 92%, #000);
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+                z-index: 110;
+                transition: right 0.45s var(--transition-smooth);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 1.5rem;
+                box-shadow: -8px 0 40px rgba(0, 0, 0, 0.25);
+                border-left: 1px solid rgba(255, 255, 255, 0.08);
+            }
+            .nav-links-wrapper.open {
+                right: 0;
+            }
+            .nav-links-wrapper .nav-links {
+                flex-direction: column;
+                gap: 1.5rem;
+                font-size: 1.1rem;
+            }
+            .nav-links-wrapper .nav-links a {
+                font-size: 1rem;
+                padding: 0.6rem 1.2rem;
+            }
+            .nav-links-wrapper .nav-socials {
+                display: flex;
+                gap: 1.5rem;
+                margin-top: 1.5rem;
+                font-size: 0.8rem;
+            }
+            .nav-overlay {
+                position: fixed;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 105;
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.3s;
+            }
+            .nav-overlay.open {
+                opacity: 1;
+                pointer-events: auto;
+            }
+
+            .footer {
+                padding: 0.5rem 1rem;
+                gap: 0.6rem;
+                flex-wrap: nowrap;
+            }
+            .footer-list {
+                gap: 0.8rem;
+                font-size: 0.7rem;
+            }
+            .footer-list a {
+                font-size: 0.65rem;
+            }
+            .copy-right {
+                display: none;
+            }
+            .work-button {
+                padding: 8px 14px;
+                min-width: 110px;
+                font-size: 0.7rem;
+            }
+
+            .transition-content {
+                width: 95vw;
+                height: 72vh;
+                padding-top: clamp(1.5rem, 4vh, 2.5rem);
+                gap: 0.75rem;
+            }
+            .gallery-ui {
+                bottom: 0.8rem;
+                gap: 0.3rem;
+                padding: 0.3rem 0.5rem;
+            }
+            .gallery-dot {
+                width: 5px;
+                height: 5px;
+            }
+            .gallery-arrow {
+                width: 30px;
+                height: 30px;
+                font-size: 0.8rem;
+            }
+            .slide-label {
+                bottom: 2.8rem;
+                font-size: 0.55rem;
+                padding: 0.35rem 0.6rem;
+                left: 0.6rem;
+            }
+            .gallery-slide .slide-image {
+                transform: scale(1.12) translate3d(var(--px, 0px), var(--py, 0px), 0);
+            }
+            .section-index {
+                right: 0.4rem;
+                font-size: 0.5rem;
+                letter-spacing: 0.08em;
+            }
+            .scroll-indicator {
+                bottom: 3.8rem;
+                font-size: 0.55rem;
+            }
+            .content {
+                border-radius: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .transition-content {
+                width: 97vw;
+                height: 70vh;
+                gap: 0.5rem;
+            }
+            .gallery-arrow {
+                width: 28px;
+                height: 28px;
+                font-size: 0.7rem;
+            }
+            .gallery-ui {
+                bottom: 0.6rem;
+                padding: 0.25rem 0.4rem;
+                gap: 0.25rem;
+            }
+            .footer {
+                padding: 0.4rem 0.75rem;
+            }
+            .work-button {
+                min-width: 90px;
+                padding: 6px 12px;
+                font-size: 0.6rem;
+            }
+            .footer-list a {
+                font-size: 0.6rem;
+            }
+        }
+
+        /* ── Reduced Motion ── */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.001ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+                transition-duration: 0.001ms !important;
+            }
+            .transition-content {
+                transform: none;
+                filter: none;
+                opacity: 1;
+            }
+            .h1-char {
+                opacity: 1;
+                transform: none;
+                filter: none;
+            }
+            .gallery-hint {
+                display: none;
+            }
+            .scroll-indicator {
+                display: none;
+            }
+            .catalog {
+                animation: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Skip Link -->
+    <a class="skip-link" href="#portfolioScroller">Skip to main content</a>
+
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+    <!-- Navigation -->
+    <div class="navigation" role="banner">
+        <div class="nav-brand" id="workNoTop">WORK_NO:1</div>
+        <button class="nav-toggle" id="navToggle" type="button" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="navLinksWrapper">
+            <span></span><span></span><span></span>
+        </button>
+        <nav class="nav-links-wrapper" id="navLinksWrapper" aria-label="Main navigation">
+            <ul class="nav-links" role="list">
+                <li><a href="index.html" class="transition-link" aria-label="Go to home page">Home</a></li>
+                <li><a href="portfolio.html" class="transition-link" aria-label="Go to portfolio page" aria-current="page">Portfolio</a></li>
+                <li><a href="#about" aria-label="Learn about the designer">About Designer</a></li>
+            </ul>
+            <ul class="nav-socials" role="list">
+                <li><a href="#linkedin" aria-label="Visit LinkedIn profile">LinkedIn</a></li>
+                <li><a href="#behance" aria-label="Visit Behance profile">Behance</a></li>
+                <li><a href="#mail" aria-label="Contact via email">Mail</a></li>
+            </ul>
+        </nav>
+        <div class="nav-socials" aria-hidden="true">
+            <ul class="nav-socials" role="list">
+                <li><a href="#linkedin" aria-label="Visit LinkedIn profile">LinkedIn</a></li>
+                <li><a href="#behance" aria-label="Visit Behance profile">Behance</a></li>
+                <li><a href="#mail" aria-label="Contact via email">Mail</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="nav-overlay" id="navOverlay" aria-hidden="true"></div>
+
+    <!-- Main Container -->
+    <main class="container" id="portfolioScroller" role="main" aria-label="Portfolio gallery">
+
+        <!-- Section 1 -->
+        <section class="section object_1" data-work="1" tabindex="0" aria-label="Work number 1: TerraVibe">
+            <div class="transition-content">
+                <div class="section-heading">
+                    <h1 data-assemble="WORK_NO:1" aria-label="Work number 1"></h1>
+                </div>
+                <div class="content" role="group" aria-label="Work 1 gallery">
+                    <div class="horizontal-gallery" tabindex="0" aria-label="Work 1 horizontal gallery – use arrow keys or buttons to navigate">
+                        <div class="gallery-track">
+                            <article class="gallery-slide" data-slide="1" role="group" aria-roledescription="slide" aria-label="Panel 1 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/DL_Flyer_with_the_Keyboard.jpg" alt="TerraVibe flyer with keyboard – panel 1" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 01 / PANEL 01</div>
+                                <div class="gallery-hint" aria-hidden="true">Scroll horizontally</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="2" role="group" aria-roledescription="slide" aria-label="Panel 2 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/DL_Flyer_with_the_Keyboard.jpg" alt="TerraVibe flyer with keyboard – panel 2" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 01 / PANEL 02</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="3" role="group" aria-roledescription="slide" aria-label="Panel 3 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/DL_Flyer_with_the_Keyboard.jpg" alt="TerraVibe flyer with keyboard – panel 3" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 01 / PANEL 03</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="4" role="group" aria-roledescription="slide" aria-label="Panel 4 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/DL_Flyer_with_the_Keyboard.jpg" alt="TerraVibe flyer with keyboard – panel 4" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 01 / PANEL 04</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="5" role="group" aria-roledescription="slide" aria-label="Panel 5 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/DL_Flyer_with_the_Keyboard.jpg" alt="TerraVibe flyer with keyboard – panel 5" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 01 / PANEL 05</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="6" role="group" aria-roledescription="slide" aria-label="Panel 6 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/DL_Flyer_with_the_Keyboard.jpg" alt="TerraVibe flyer with keyboard – panel 6" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 01 / PANEL 06</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="7" role="group" aria-roledescription="slide" aria-label="Panel 7 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/DL_Flyer_with_the_Keyboard.jpg" alt="TerraVibe flyer with keyboard – panel 7" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 01 / PANEL 07</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="8" role="group" aria-roledescription="slide" aria-label="Panel 8 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/DL_Flyer_with_the_Keyboard.jpg" alt="TerraVibe flyer with keyboard – panel 8" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 01 / PANEL 08</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="9" role="group" aria-roledescription="slide" aria-label="Panel 9 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/DL_Flyer_with_the_Keyboard.jpg" alt="TerraVibe flyer with keyboard – panel 9" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 01 / PANEL 09</div>
+                            </article>
+                        </div>
+                    </div>
+                    <div class="gallery-ui" role="tablist" aria-label="Work 1 panels navigation">
+                        <button class="gallery-arrow" type="button" data-direction="prev" aria-label="Previous panel" disabled>
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="10 3 5 8 10 13"/></svg>
+                        </button>
+                        <div class="gallery-dots" role="group" aria-label="Panel indicators">
+                            <button class="gallery-dot active" type="button" data-target="1" aria-label="Go to panel 1" role="tab" aria-selected="true"></button>
+                            <button class="gallery-dot" type="button" data-target="2" aria-label="Go to panel 2" role="tab" aria-selected="false"></button>
+                            <button class="gallery-dot" type="button" data-target="3" aria-label="Go to panel 3" role="tab" aria-selected="false"></button>
+                            <button class="gallery-dot" type="button" data-target="4" aria-label="Go to panel 4" role="tab" aria-selected="false"></button>
+                            <button class="gallery-dot" type="button" data-target="5" aria-label="Go to panel 5" role="tab" aria-selected="false"></button>
+                            <button class="gallery-dot" type="button" data-target="6" aria-label="Go to panel 6" role="tab" aria-selected="false"></button>
+                            <button class="gallery-dot" type="button" data-target="7" aria-label="Go to panel 7" role="tab" aria-selected="false"></button>
+                            <button class="gallery-dot" type="button" data-target="8" aria-label="Go to panel 8" role="tab" aria-selected="false"></button>
+                            <button class="gallery-dot" type="button" data-target="9" aria-label="Go to panel 9" role="tab" aria-selected="false"></button>
+                        </div>
+                        <button class="gallery-arrow" type="button" data-direction="next" aria-label="Next panel">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 3 11 8 6 13"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="section-index" aria-hidden="true">01 / 06</div>
+            <div class="scroll-indicator" aria-hidden="true">
+                <span>Scroll</span>
+                <svg viewBox="0 0 16 16"><polyline points="3 5 8 10 13 5"/></svg>
+            </div>
+        </section>
+
+        <!-- Section 2 -->
+        <section class="section object_2" data-work="2" tabindex="0" aria-label="Work number 2: Backpack Linen">
+            <div class="transition-content">
+                <div class="section-heading">
+                    <h1 data-assemble="WORK_NO:2" aria-label="Work number 2"></h1>
+                </div>
+                <div class="content" role="group" aria-label="Work 2 gallery">
+                    <div class="horizontal-gallery" tabindex="0" aria-label="Work 2 horizontal gallery – use arrow keys or buttons to navigate">
+                        <div class="gallery-track">
+                            <article class="gallery-slide" data-slide="1" role="group" aria-roledescription="slide" aria-label="Panel 1 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/backpack_linen_og.jpg" alt="Backpack linen original – panel 1" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 02 / PANEL 01</div>
+                                <div class="gallery-hint" aria-hidden="true">Scroll horizontally</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="2" role="group" aria-roledescription="slide" aria-label="Panel 2 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/backpack_linen_og.jpg" alt="Backpack linen original – panel 2" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 02 / PANEL 02</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="3" role="group" aria-roledescription="slide" aria-label="Panel 3 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/backpack_linen_og.jpg" alt="Backpack linen original – panel 3" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 02 / PANEL 03</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="4" role="group" aria-roledescription="slide" aria-label="Panel 4 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/backpack_linen_og.jpg" alt="Backpack linen original – panel 4" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 02 / PANEL 04</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="5" role="group" aria-roledescription="slide" aria-label="Panel 5 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/backpack_linen_og.jpg" alt="Backpack linen original – panel 5" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 02 / PANEL 05</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="6" role="group" aria-roledescription="slide" aria-label="Panel 6 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/backpack_linen_og.jpg" alt="Backpack linen original – panel 6" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 02 / PANEL 06</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="7" role="group" aria-roledescription="slide" aria-label="Panel 7 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/backpack_linen_og.jpg" alt="Backpack linen original – panel 7" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 02 / PANEL 07</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="8" role="group" aria-roledescription="slide" aria-label="Panel 8 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/backpack_linen_og.jpg" alt="Backpack linen original – panel 8" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 02 / PANEL 08</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="9" role="group" aria-roledescription="slide" aria-label="Panel 9 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/backpack_linen_og.jpg" alt="Backpack linen original – panel 9" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 02 / PANEL 09</div>
+                            </article>
+                        </div>
+                    </div>
+                    <div class="gallery-ui" role="tablist" aria-label="Work 2 panels navigation">
+                        <button class="gallery-arrow" type="button" data-direction="prev" aria-label="Previous panel" disabled>
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="10 3 5 8 10 13"/></svg>
+                        </button>
+                        <div class="gallery-dots" role="group" aria-label="Panel indicators">
+                            <button class="gallery-dot active" type="button" data-target="1" aria-label="Go to panel 1" role="tab" aria-selected="true"></button>
+                            <button class="gallery-dot" type="button" data-target="2" aria-label="Go to panel 2" role="tab" aria-selected="false"></button>
+                            <button class="gallery-dot" type="button" data-target="3" aria-label="Go to panel 3" role="tab" aria-selected="false"></button>
+                            <button class="gallery-dot" type="button" data-target="4" aria-label="Go to panel 4" role="tab" aria-selected="false"></button>
+                            <button class="gallery-dot" type="button" data-target="5" aria-label="Go to panel 5" role="tab" aria-selected="false"></button>
+                            <button class="gallery-dot" type="button" data-target="6" aria-label="Go to panel 6" role="tab" aria-selected="false"></button>
+                            <button class="gallery-dot" type="button" data-target="7" aria-label="Go to panel 7" role="tab" aria-selected="false"></button>
+                            <button class="gallery-dot" type="button" data-target="8" aria-label="Go to panel 8" role="tab" aria-selected="false"></button>
+                            <button class="gallery-dot" type="button" data-target="9" aria-label="Go to panel 9" role="tab" aria-selected="false"></button>
+                        </div>
+                        <button class="gallery-arrow" type="button" data-direction="next" aria-label="Next panel">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 3 11 8 6 13"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="section-index" aria-hidden="true">02 / 06</div>
+            <div class="scroll-indicator" aria-hidden="true">
+                <span>Scroll</span>
+                <svg viewBox="0 0 16 16"><polyline points="3 5 8 10 13 5"/></svg>
+            </div>
+        </section>
+
+        <!-- Section 3 -->
+        <section class="section object_3" data-work="3" tabindex="0" aria-label="Work number 3: Road Bike">
+            <div class="transition-content">
+                <div class="section-heading">
+                    <h1 data-assemble="WORK_NO:3" aria-label="Work number 3"></h1>
+                </div>
+                <div class="content" role="group" aria-label="Work 3 gallery">
+                    <div class="horizontal-gallery" tabindex="0" aria-label="Work 3 horizontal gallery – use arrow keys or buttons to navigate">
+                        <div class="gallery-track">
+                            <article class="gallery-slide" data-slide="1" role="group" aria-roledescription="slide" aria-label="Panel 1 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/road_bike_1_1.jpg" alt="Road bike – panel 1" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 03 / PANEL 01</div>
+                                <div class="gallery-hint" aria-hidden="true">Scroll horizontally</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="2" role="group" aria-roledescription="slide" aria-label="Panel 2 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/road_bike_1_1.jpg" alt="Road bike – panel 2" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 03 / PANEL 02</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="3" role="group" aria-roledescription="slide" aria-label="Panel 3 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/road_bike_1_1.jpg" alt="Road bike – panel 3" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 03 / PANEL 03</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="4" role="group" aria-roledescription="slide" aria-label="Panel 4 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/road_bike_1_1.jpg" alt="Road bike – panel 4" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 03 / PANEL 04</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="5" role="group" aria-roledescription="slide" aria-label="Panel 5 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/road_bike_1_1.jpg" alt="Road bike – panel 5" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 03 / PANEL 05</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="6" role="group" aria-roledescription="slide" aria-label="Panel 6 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/road_bike_1_1.jpg" alt="Road bike – panel 6" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 03 / PANEL 06</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="7" role="group" aria-roledescription="slide" aria-label="Panel 7 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/road_bike_1_1.jpg" alt="Road bike – panel 7" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 03 / PANEL 07</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="8" role="group" aria-roledescription="slide" aria-label="Panel 8 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/road_bike_1_1.jpg" alt="Road bike – panel 8" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 03 / PANEL 08</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="9" role="group" aria-roledescription="slide" aria-label="Panel 9 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/road_bike_1_1.jpg" alt="Road bike – panel 9" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 03 / PANEL 09</div>
+                            </article>
+                        </div>
+                    </div>
+                    <div class="gallery-ui" role="tablist" aria-label="Work 3 panels navigation">
+                        <button class="gallery-arrow" type="button" data-direction="prev" aria-label="Previous panel" disabled>
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="10 3 5 8 10 13"/></svg>
+                        </button>
+                        <div class="gallery-dots" role="group" aria-label="Panel indicators">
+                            <button class="gallery-dot active" type="button" data-target="1" aria-label="Go to panel 1" role="tab" aria-selected="true"></button>
+                            <button class="gallery-dot" type="button" data-target="2" aria-label="Go to panel 2" role="tab" aria-selected="false"></button>
+                            <button class="gallery-dot" type="button" data-target="3" aria-label="Go to panel 3" role="tab" aria-selected="false"></button>
+                            <button class="gallery-dot" type="button" data-target="4" aria-label="Go to panel 4" role="tab" aria-selected="false"></button>
+                            <button class="gallery-dot" type="button" data-target="5" aria-label="Go to panel 5" role="tab" aria-selected="false"></button>
+                            <button class="gallery-dot" type="button" data-target="6" aria-label="Go to panel 6" role="tab" aria-selected="false"></button>
+                            <button class="gallery-dot" type="button" data-target="7" aria-label="Go to panel 7" role="tab" aria-selected="false"></button>
+                            <button class="gallery-dot" type="button" data-target="8" aria-label="Go to panel 8" role="tab" aria-selected="false"></button>
+                            <button class="gallery-dot" type="button" data-target="9" aria-label="Go to panel 9" role="tab" aria-selected="false"></button>
+                        </div>
+                        <button class="gallery-arrow" type="button" data-direction="next" aria-label="Next panel">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 3 11 8 6 13"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="section-index" aria-hidden="true">03 / 06</div>
+            <div class="scroll-indicator" aria-hidden="true">
+                <span>Scroll</span>
+                <svg viewBox="0 0 16 16"><polyline points="3 5 8 10 13 5"/></svg>
+            </div>
+        </section>
+
+        <!-- Section 4 -->
+        <section class="section object_4" data-work="4" tabindex="0" aria-label="Work number 4: Skateboard">
+            <div class="transition-content">
+                <div class="section-heading">
+                    <h1 data-assemble="WORK_NO:4" aria-label="Work number 4"></h1>
+                </div>
+                <div class="content" role="group" aria-label="Work 4 gallery">
+                    <div class="horizontal-gallery" tabindex="0" aria-label="Work 4 horizontal gallery – use arrow keys or buttons to navigate">
+                        <div class="gallery-track">
+                            <article class="gallery-slide" data-slide="1" role="group" aria-roledescription="slide" aria-label="Panel 1 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/skateboard_f&b.jpg" alt="Skateboard front and back – panel 1" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 04 / PANEL 01</div>
+                                <div class="gallery-hint" aria-hidden="true">Scroll horizontally</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="2" role="group" aria-roledescription="slide" aria-label="Panel 2 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/skateboard_f&b.jpg" alt="Skateboard front and back – panel 2" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 04 / PANEL 02</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="3" role="group" aria-roledescription="slide" aria-label="Panel 3 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/skateboard_f&b.jpg" alt="Skateboard front and back – panel 3" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 04 / PANEL 03</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="4" role="group" aria-roledescription="slide" aria-label="Panel 4 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/skateboard_f&b.jpg" alt="Skateboard front and back – panel 4" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 04 / PANEL 04</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="5" role="group" aria-roledescription="slide" aria-label="Panel 5 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/skateboard_f&b.jpg" alt="Skateboard front and back – panel 5" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 04 / PANEL 05</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="6" role="group" aria-roledescription="slide" aria-label="Panel 6 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/skateboard_f&b.jpg" alt="Skateboard front and back – panel 6" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 04 / PANEL 06</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="7" role="group" aria-roledescription="slide" aria-label="Panel 7 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/skateboard_f&b.jpg" alt="Skateboard front and back – panel 7" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 04 / PANEL 07</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="8" role="group" aria-roledescription="slide" aria-label="Panel 8 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/skateboard_f&b.jpg" alt="Skateboard front and back – panel 8" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 04 / PANEL 08</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="9" role="group" aria-roledescription="slide" aria-label="Panel 9 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/skateboard_f&b.jpg" alt="Skateboard front and back – panel 9" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 04 / PANEL 09</div>
+                            </article>
+                        </div>
+                    </div>
+                    <div class="gallery-ui" role="tablist" aria-label="Work 4 panels navigation">
+                        <button class="gallery-arrow" type="button" data-direction="prev" aria-label="Previous panel" disabled>
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="10 3 5 8 10 13"/></svg>
+                        </button>
+                        <div class="gallery-dots" role="group" aria-label="Panel indicators">
+                            <button class="gallery-dot active" type="button" data-target="1" aria-label="Go to panel 1" role="tab" aria-selected="true"></button>
+                            <button class="gallery-dot" type="button" data-target="2" aria-label="Go to panel 2" role="tab" aria-selected="false"></button>
+                            <button class="gallery-dot" type="button" data-target="3" aria-label="Go to panel 3" role="tab" aria-selected="false"></button>
+                            <button class="gallery-dot" type="button" data-target="4" aria-label="Go to panel 4" role="tab" aria-selected="false"></button>
+                            <button class="gallery-dot" type="button" data-target="5" aria-label="Go to panel 5" role="tab" aria-selected="false"></button>
+                            <button class="gallery-dot" type="button" data-target="6" aria-label="Go to panel 6" role="tab" aria-selected="false"></button>
+                            <button class="gallery-dot" type="button" data-target="7" aria-label="Go to panel 7" role="tab" aria-selected="false"></button>
+                            <button class="gallery-dot" type="button" data-target="8" aria-label="Go to panel 8" role="tab" aria-selected="false"></button>
+                            <button class="gallery-dot" type="button" data-target="9" aria-label="Go to panel 9" role="tab" aria-selected="false"></button>
+                        </div>
+                        <button class="gallery-arrow" type="button" data-direction="next" aria-label="Next panel">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 3 11 8 6 13"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="section-index" aria-hidden="true">04 / 06</div>
+            <div class="scroll-indicator" aria-hidden="true">
+                <span>Scroll</span>
+                <svg viewBox="0 0 16 16"><polyline points="3 5 8 10 13 5"/></svg>
+            </div>
+        </section>
+
+        <!-- Section 5 -->
+        <section class="section object_5" data-work="5" tabindex="0" aria-label="Work number 5: Chopsticks">
+            <div class="transition-content">
+                <div class="section-heading">
+                    <h1 data-assemble="WORK_NO:5" aria-label="Work number 5"></h1>
+                </div>
+                <div class="content" role="group" aria-label="Work 5 gallery">
+                    <div class="horizontal-gallery" tabindex="0" aria-label="Work 5 horizontal gallery – use arrow keys or buttons to navigate">
+                        <div class="gallery-track">
+                            <article class="gallery-slide" data-slide="1" role="group" aria-roledescription="slide" aria-label="Panel 1 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/chopsticks_mockup_4.jpg" alt="Chopsticks mockup – panel 1" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 05 / PANEL 01</div>
+                                <div class="gallery-hint" aria-hidden="true">Scroll horizontally</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="2" role="group" aria-roledescription="slide" aria-label="Panel 2 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/chopsticks_mockup_4.jpg" alt="Chopsticks mockup – panel 2" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 05 / PANEL 02</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="3" role="group" aria-roledescription="slide" aria-label="Panel 3 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/chopsticks_mockup_4.jpg" alt="Chopsticks mockup – panel 3" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 05 / PANEL 03</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="4" role="group" aria-roledescription="slide" aria-label="Panel 4 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/chopsticks_mockup_4.jpg" alt="Chopsticks mockup – panel 4" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 05 / PANEL 04</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="5" role="group" aria-roledescription="slide" aria-label="Panel 5 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/chopsticks_mockup_4.jpg" alt="Chopsticks mockup – panel 5" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 05 / PANEL 05</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="6" role="group" aria-roledescription="slide" aria-label="Panel 6 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/chopsticks_mockup_4.jpg" alt="Chopsticks mockup – panel 6" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 05 / PANEL 06</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="7" role="group" aria-roledescription="slide" aria-label="Panel 7 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/chopsticks_mockup_4.jpg" alt="Chopsticks mockup – panel 7" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 05 / PANEL 07</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="8" role="group" aria-roledescription="slide" aria-label="Panel 8 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/chopsticks_mockup_4.jpg" alt="Chopsticks mockup – panel 8" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 05 / PANEL 08</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="9" role="group" aria-roledescription="slide" aria-label="Panel 9 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/chopsticks_mockup_4.jpg" alt="Chopsticks mockup – panel 9" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 05 / PANEL 09</div>
+                            </article>
+                        </div>
+                    </div>
+                    <div class="gallery-ui" role="tablist" aria-label="Work 5 panels navigation">
+                        <button class="gallery-arrow" type="button" data-direction="prev" aria-label="Previous panel" disabled>
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="10 3 5 8 10 13"/></svg>
+                        </button>
+                        <div class="gallery-dots" role="group" aria-label="Panel indicators">
+                            <button class="gallery-dot active" type="button" data-target="1" aria-label="Go to panel 1" role="tab" aria-selected="true"></button>
+                            <button class="gallery-dot" type="button" data-target="2" aria-label="Go to panel 2" role="tab" aria-selected="false"></button>
+                            <button class="gallery-dot" type="button" data-target="3" aria-label="Go to panel 3" role="tab" aria-selected="false"></button>
+                            <button class="gallery-dot" type="button" data-target="4" aria-label="Go to panel 4" role="tab" aria-selected="false"></button>
+                            <button class="gallery-dot" type="button" data-target="5" aria-label="Go to panel 5" role="tab" aria-selected="false"></button>
+                            <button class="gallery-dot" type="button" data-target="6" aria-label="Go to panel 6" role="tab" aria-selected="false"></button>
+                            <button class="gallery-dot" type="button" data-target="7" aria-label="Go to panel 7" role="tab" aria-selected="false"></button>
+                            <button class="gallery-dot" type="button" data-target="8" aria-label="Go to panel 8" role="tab" aria-selected="false"></button>
+                            <button class="gallery-dot" type="button" data-target="9" aria-label="Go to panel 9" role="tab" aria-selected="false"></button>
+                        </div>
+                        <button class="gallery-arrow" type="button" data-direction="next" aria-label="Next panel">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 3 11 8 6 13"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="section-index" aria-hidden="true">05 / 06</div>
+            <div class="scroll-indicator" aria-hidden="true">
+                <span>Scroll</span>
+                <svg viewBox="0 0 16 16"><polyline points="3 5 8 10 13 5"/></svg>
+            </div>
+        </section>
+
+        <!-- Section 6 -->
+        <section class="section object_6" data-work="6" tabindex="0" aria-label="Work number 6: Women's Shirt">
+            <div class="transition-content">
+                <div class="section-heading">
+                    <h1 data-assemble="WORK_NO:6" aria-label="Work number 6"></h1>
+                </div>
+                <div class="content" role="group" aria-label="Work 6 gallery">
+                    <div class="horizontal-gallery" tabindex="0" aria-label="Work 6 horizontal gallery – use arrow keys or buttons to navigate">
+                        <div class="gallery-track">
+                            <article class="gallery-slide" data-slide="1" role="group" aria-roledescription="slide" aria-label="Panel 1 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/women's_shirt_front.jpg" alt="Women's shirt front – panel 1" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 06 / PANEL 01</div>
+                                <div class="gallery-hint" aria-hidden="true">Scroll horizontally</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="2" role="group" aria-roledescription="slide" aria-label="Panel 2 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/women's_shirt_front.jpg" alt="Women's shirt front – panel 2" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 06 / PANEL 02</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="3" role="group" aria-roledescription="slide" aria-label="Panel 3 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/women's_shirt_front.jpg" alt="Women's shirt front – panel 3" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 06 / PANEL 03</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="4" role="group" aria-roledescription="slide" aria-label="Panel 4 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/women's_shirt_front.jpg" alt="Women's shirt front – panel 4" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 06 / PANEL 04</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="5" role="group" aria-roledescription="slide" aria-label="Panel 5 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/women's_shirt_front.jpg" alt="Women's shirt front – panel 5" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 06 / PANEL 05</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="6" role="group" aria-roledescription="slide" aria-label="Panel 6 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/women's_shirt_front.jpg" alt="Women's shirt front – panel 6" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 06 / PANEL 06</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="7" role="group" aria-roledescription="slide" aria-label="Panel 7 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/women's_shirt_front.jpg" alt="Women's shirt front – panel 7" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 06 / PANEL 07</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="8" role="group" aria-roledescription="slide" aria-label="Panel 8 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/women's_shirt_front.jpg" alt="Women's shirt front – panel 8" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 06 / PANEL 08</div>
+                            </article>
+                            <article class="gallery-slide" data-slide="9" role="group" aria-roledescription="slide" aria-label="Panel 9 of 9">
+                                <img class="slide-image" src="images/Branding & Identity/TerraVibe/women's_shirt_front.jpg" alt="Women's shirt front – panel 9" loading="lazy" decoding="async">
+                                <div class="slide-label" aria-hidden="true">WORK 06 / PANEL 09</div>
+                            </article>
+                        </div>
+                    </div>
+                    <div class="gallery-ui" role="tablist" aria-label="Work 6 panels navigation">
+                        <button class="gallery-arrow" type="button" data-direction="prev" aria-label="Previous panel" disabled>
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="10 3 5 8 10 13"/></svg>
+                        </button>
+                        <div class="gallery-dots" role="group" aria-label="Panel indicators">
+                            <button class="gallery-dot active" type="button" data-target="1" aria-label="Go to panel 1" role="tab" aria-selected="true"></button>
+                            <button class="gallery-dot" type="button" data-target="2" aria-label="Go to panel 2" role="tab" aria-selected="false"></button>
+                            <button class="gallery-dot" type="button" data-target="3" aria-label="Go to panel 3" role="tab" aria-selected="false"></button>
+                            <button class="gallery-dot" type="button" data-target="4" aria-label="Go to panel 4" role="tab" aria-selected="false"></button>
+                            <button class="gallery-dot" type="button" data-target="5" aria-label="Go to panel 5" role="tab" aria-selected="false"></button>
+                            <button class="gallery-dot" type="button" data-target="6" aria-label="Go to panel 6" role="tab" aria-selected="false"></button>
+                            <button class="gallery-dot" type="button" data-target="7" aria-label="Go to panel 7" role="tab" aria-selected="false"></button>
+                            <button class="gallery-dot" type="button" data-target="8" aria-label="Go to panel 8" role="tab" aria-selected="false"></button>
+                            <button class="gallery-dot" type="button" data-target="9" aria-label="Go to panel 9" role="tab" aria-selected="false"></button>
+                        </div>
+                        <button class="gallery-arrow" type="button" data-direction="next" aria-label="Next panel">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 3 11 8 6 13"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="section-index" aria-hidden="true">06 / 06</div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <div class="footer" role="contentinfo">
+        <div>
+            <button class="work-button" type="button" aria-label="Hire my skills – contact for work">Hire My Skills</button>
+        </div>
+        <div>
+            <ul class="footer-list" role="list">
+                <li><a href="selected_works.html" class="transition-link" aria-label="View selected works">Selected Works</a></li>
+                <li><a class="catalog" href="catalog.html" aria-label="Browse catalog">Catalog</a></li>
+                <li><a href="#overview" aria-label="Get in touch">Get In Touch</a></li>
+            </ul>
+        </div>
+        <div class="copy-right">
+            <p>&copy; 2026 Ramsey Asiedu</p>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            'use strict';
+
+            // ── Configuration ──
+            const scroller = document.getElementById('portfolioScroller');
+            const workNoTop = document.getElementById('workNoTop');
+            const scrollProgress = document.getElementById('scrollProgress');
+            const navToggle = document.getElementById('navToggle');
+            const navLinksWrapper = document.getElementById('navLinksWrapper');
+            const navOverlay = document.getElementById('navOverlay');
+            const sections = [...document.querySelectorAll('.section')];
+            const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
+
+            // ── Navigation Toggle (Mobile) ──
+            function closeMobileNav() {
+                navLinksWrapper.classList.remove('open');
+                navOverlay.classList.remove('open');
+                navToggle.setAttribute('aria-expanded', 'false');
+            }
+
+            function toggleMobileNav() {
+                const isOpen = navLinksWrapper.classList.toggle('open');
+                navOverlay.classList.toggle('open', isOpen);
+                navToggle.setAttribute('aria-expanded', String(isOpen));
+                if (isOpen) {
+                    navLinksWrapper.querySelector('a')?.focus();
+                }
+            }
+
+            navToggle.addEventListener('click', toggleMobileNav);
+            navOverlay.addEventListener('click', closeMobileNav);
+            navLinksWrapper.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', closeMobileNav);
+            });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeMobileNav();
+            });
+
+            // ── Character Assembly Animation ──
+            document.querySelectorAll('[data-assemble]').forEach(heading => {
+                const text = heading.dataset.assemble;
+                heading.setAttribute('aria-label', text);
+                heading.textContent = '';
+                [...text].forEach((char, i) => {
+                    const span = document.createElement('span');
+                    span.className = 'h1-char';
+                    span.setAttribute('aria-hidden', 'true');
+                    span.textContent = char === ' ' ? '\u00A0' : char;
+                    const angle = (i * 37) % 360;
+                    const dist = 90 + (i * 19) % 90;
+                    const rad = angle * Math.PI / 180;
+                    const sr = (i % 2 ? -1 : 1) * (4 + (i % 5) * 2);
+                    const exitAngle = ((angle + 145) % 360) * Math.PI / 180;
+                    const exitDist = 80 + (i * 17) % 100;
+                    span.style.setProperty('--sx', `${(Math.cos(rad) * dist).toFixed(1)}px`);
+                    span.style.setProperty('--sy', `${(Math.sin(rad) * dist).toFixed(1)}px`);
+                    span.style.setProperty('--sr', `${sr}deg`);
+                    span.style.setProperty('--ex', `${(Math.cos(exitAngle) * exitDist).toFixed(1)}px`);
+                    span.style.setProperty('--ey', `${(Math.sin(exitAngle) * exitDist).toFixed(1)}px`);
+                    span.style.setProperty('--er', `${(-sr * 1.5).toFixed(1)}deg`);
+                    span.style.setProperty('--delay', `${(i * 0.022).toFixed(3)}s`);
+                    heading.appendChild(span);
+                });
+            });
+
+            // ── Intersection Observer for Section Visibility ──
+            const sectionObserver = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    entry.target.classList.toggle('visible', entry.isIntersecting);
+                });
+            }, { root: scroller, threshold: 0.45 });
+            document.querySelectorAll('.transition-content').forEach(el => sectionObserver.observe(el));
+
+            // ── Color Extraction (Debounced + Cached) ──
+            const colorCache = new Map();
+
+            function getDominantColor(img) {
+                const src = img.src;
+                if (colorCache.has(src)) return Promise.resolve(colorCache.get(src));
+
+                return new Promise(resolve => {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+                    if (!ctx || !img.complete || !img.naturalWidth) {
+                        resolve(null);
+                        return;
+                    }
+                    canvas.width = canvas.height = 32;
+                    try {
+                        ctx.drawImage(img, 0, 0, 32, 32);
+                        const pixels = ctx.getImageData(0, 0, 32, 32).data;
+                        const bins = new Map();
+                        for (let i = 0; i < pixels.length; i += 4) {
+                            if (pixels[i + 3] < 170) continue;
+                            let r = pixels[i],
+                                g = pixels[i + 1],
+                                b = pixels[i + 2];
+                            const max = Math.max(r, g, b),
+                                min = Math.min(r, g, b);
+                            const lum = (max + min) / 510;
+                            if (max < 20 || min > 238) continue;
+                            r = Math.min(255, Math.round(r / 16) * 16);
+                            g = Math.min(255, Math.round(g / 16) * 16);
+                            b = Math.min(255, Math.round(b / 16) * 16);
+                            const key = `${r},${g},${b}`;
+                            const weight = 1 + (1 - Math.abs(lum - 0.5)) * 1.3;
+                            bins.set(key, (bins.get(key) || 0) + weight);
+                        }
+                        const sorted = [...bins.entries()].sort((a, b) => b[1] - a[1]);
+                        const result = sorted.length ?
+                            Object.fromEntries(['r', 'g', 'b'].map((k, i) => [k, Number(sorted[0][0].split(',')[i])])) :
+                            null;
+                        colorCache.set(src, result);
+                        resolve(result);
+                    } catch {
+                        colorCache.set(src, null);
+                        resolve(null);
+                    }
+                });
+            }
+
+            function rgbToHsl(r, g, b) {
+                r /= 255;
+                g /= 255;
+                b /= 255;
+                const mx = Math.max(r, g, b),
+                    mn = Math.min(r, g, b),
+                    d = mx - mn,
+                    l = (mx + mn) / 2;
+                let h = 0,
+                    s = 0;
+                if (d) {
+                    s = l > 0.5 ? d / (2 - mx - mn) : d / (mx + mn);
+                    switch (mx) {
+                        case r:
+                            h = (g - b) / d + (g < b ? 6 : 0);
+                            break;
+                        case g:
+                            h = (b - r) / d + 2;
+                            break;
+                        default:
+                            h = (r - g) / d + 4;
+                    }
+                    h /= 6;
+                }
+                return [h * 360, s * 100, l * 100];
+            }
+
+            function hslToRgb(h, s, l) {
+                h = ((h % 360) + 360) % 360 / 360;
+                s /= 100;
+                l /= 100;
+                if (!s) { const v = Math.round(l * 255); return [v, v, v]; }
+                const q = l < 0.5 ? l * (1 + s) : l + s - l * s,
+                    p = 2 * l - q;
+                const f = (t) => {
+                    if (t < 0) t += 1;
+                    if (t > 1) t -= 1;
+                    if (t < 1 / 6) return p + (q - p) * 6 * t;
+                    if (t < 1 / 2) return q;
+                    if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+                    return p;
+                };
+                return [Math.round(f(h + 1 / 3) * 255), Math.round(f(h) * 255), Math.round(f(h - 1 / 3) * 255)];
+            }
+
+            function luminance(r, g, b) {
+                return [r, g, b].map(v => {
+                    v /= 255;
+                    return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+                }).reduce((acc, v, i) => acc + v * [0.2126, 0.7152, 0.0722][i], 0);
+            }
+
+            function contrastRatio(a, b) {
+                const la = luminance(...a),
+                    lb = luminance(...b);
+                return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
+            }
+
+            function readableComplement(r, g, b) {
+                const [h, s, l] = rgbToHsl(r, g, b),
+                    bg = [r, g, b];
+                const candidates = [
+                    hslToRgb(h + 180, Math.min(92, Math.max(48, s + 15)), 34),
+                    hslToRgb(h + 180, Math.min(82, Math.max(38, s + 8)), 68),
+                    [255, 255, 255],
+                    [17, 17, 17]
+                ].filter(c => contrastRatio(c, bg) >= 4.5)
+                    .sort((a, b) => contrastRatio(b, bg) - contrastRatio(a, bg));
+                return candidates[0] || (l > 55 ? [17, 17, 17] : [255, 255, 255]);
+            }
+
+            function setSectionColor(section, rgb) {
+                if (!rgb) return;
+                const { r, g, b } = rgb;
+                const bg = `rgb(${r}, ${g}, ${b})`;
+                const text = readableComplement(r, g, b);
+                const textHex = `#${text.map(v => v.toString(16).padStart(2, '0')).join('')}`;
+                const [h, s, l] = rgbToHsl(r, g, b);
+                const accent = hslToRgb(h + 180, Math.min(88, Math.max(55, s)), Math.min(78, Math.max(42, l > 50 ? l - 10 : l +
+                    15)));
+                const accentHex = `#${accent.map(v => v.toString(16).padStart(2, '0')).join('')}`;
+                section.style.setProperty('--section-bg', bg);
+                section.style.setProperty('--text-color', textHex);
+                section.style.setProperty('--muted-color', contrastRatio(text, [r, g, b]) >= 7 ? textHex :
+                    'rgba(255,255,255,0.82)');
+                section.style.setProperty('--link-color', textHex);
+                section.style.setProperty('--accent-color', accentHex);
+                section.style.setProperty('--accent-rgb', accent.join(', '));
+                section.style.setProperty('--accent-contrast', contrastRatio([17, 17, 17], accent) >= 4.5 ? '#111' :
+                '#fff');
+                section.style.setProperty('--catalog-a', accentHex);
+                section.style.setProperty('--catalog-b', textHex);
+            }
+
+            async function applyImageColor(section) {
+                const img = section.querySelector('.slide-image');
+                if (!img) return;
+                if (!img.complete) {
+                    await new Promise(r => {
+                        img.addEventListener('load', r, { once: true });
+                        img.addEventListener('error', r, { once: true });
+                    });
+                }
+                const rgb = await getDominantColor(img);
+                setSectionColor(section, rgb);
+            }
+
+            // Only extract colors for visible sections (lazy)
+            const colorObserver = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        applyImageColor(entry.target);
+                        colorObserver.unobserve(entry.target);
+                    }
+                });
+            }, { root: scroller, threshold: 0.3 });
+            sections.forEach(section => colorObserver.observe(section));
+
+            // ── Horizontal Gallery Setup ──
+            const galleries = [...document.querySelectorAll('.horizontal-gallery')];
+
+            function setupGallery(gallery) {
+                const slides = [...gallery.querySelectorAll('.gallery-slide')];
+                const dots = [...gallery.parentElement.querySelectorAll('.gallery-dot')];
+                const prevBtn = gallery.parentElement.querySelector('.gallery-arrow[data-direction="prev"]');
+                const nextBtn = gallery.parentElement.querySelector('.gallery-arrow[data-direction="next"]');
+                let targetX = gallery.scrollLeft;
+                let animFrame = 0;
+                let pointerDown = false;
+                let pointerStartX = 0;
+                let pointerStartY = 0;
+                let pointerStartScroll = 0;
+                let dragAxis = null;
+                let currentIndex = 0;
+
+                const resizeSlides = () => {
+                    const width = Math.max(1, gallery.clientWidth);
+                    slides.forEach(slide => {
+                        slide.style.flex = `0 0 ${width}px`;
+                        slide.style.width = `${width}px`;
+                    });
+                    targetX = clamp(gallery.scrollLeft, 0, Math.max(0, gallery.scrollWidth - gallery.clientWidth));
+                    update();
+                };
+
+                const setActive = (index) => {
+                    currentIndex = clamp(index, 0, slides.length - 1);
+                    slides.forEach((slide, i) => slide.classList.toggle('is-active', i === currentIndex));
+                    dots.forEach((dot, i) => {
+                        const active = i === currentIndex;
+                        dot.classList.toggle('active', active);
+                        dot.setAttribute('aria-selected', String(active));
+                    });
+                    if (prevBtn) prevBtn.disabled = currentIndex === 0;
+                    if (nextBtn) nextBtn.disabled = currentIndex === slides.length - 1;
+                };
+
+                const stopAnimation = () => {
+                    if (animFrame) { cancelAnimationFrame(animFrame);
+                        animFrame = 0; }
+                };
+
+                const easeOutCubic = t => 1 - Math.pow(1 - t, 3);
+
+                const smoothTo = (x) => {
+                    stopAnimation();
+                    const max = Math.max(0, gallery.scrollWidth - gallery.clientWidth);
+                    targetX = clamp(x, 0, max);
+                    const start = gallery.scrollLeft;
+                    const distance = targetX - start;
+                    if (Math.abs(distance) < 0.5) { gallery.scrollLeft = targetX;
+                        update(); return; }
+                    const duration = reducedMotion ? 1 : 580;
+                    const startTime = performance.now();
+                    const animate = (now) => {
+                        const t = clamp((now - startTime) / duration, 0, 1);
+                        gallery.scrollLeft = start + distance * easeOutCubic(t);
+                        if (t < 1) {
+                            animFrame = requestAnimationFrame(animate);
+                        } else {
+                            animFrame = 0;
+                            gallery.scrollLeft = targetX;
+                            update();
+                        }
+                    };
+                    animFrame = requestAnimationFrame(animate);
+                };
+
+                const atStart = () => gallery.scrollLeft <= 1;
+                const atEnd = () => gallery.scrollLeft + gallery.clientWidth >= gallery.scrollWidth - 1;
+
+                // Wheel handling
+                gallery.addEventListener('wheel', (event) => {
+                    const absX = Math.abs(event.deltaX),
+                        absY = Math.abs(event.deltaY);
+                    if (absX > absY) return;
+                    const goingUp = event.deltaY < 0;
+                    const leavingGallery = (goingUp && atStart()) || (!goingUp && atEnd());
+                    if (leavingGallery) return;
+                    event.preventDefault();
+                    const step = gallery.clientWidth * 0.92;
+                    smoothTo(gallery.scrollLeft + (goingUp ? -step : step));
+                }, { passive: false });
+
+                // Keyboard navigation
+                gallery.addEventListener('keydown', (event) => {
+                    if (event.key === 'ArrowRight' || event.key === 'PageDown') {
+                        event.preventDefault();
+                        smoothTo(gallery.scrollLeft + gallery.clientWidth);
+                    } else if (event.key === 'ArrowLeft' || event.key === 'PageUp') {
+                        event.preventDefault();
+                        smoothTo(gallery.scrollLeft - gallery.clientWidth);
+                    } else if (event.key === 'Home') {
+                        event.preventDefault();
+                        smoothTo(0);
+                    } else if (event.key === 'End') {
+                        event.preventDefault();
+                        smoothTo(gallery.scrollWidth - gallery.clientWidth);
+                    }
+                });
+
+                // Pointer/touch drag
+                gallery.addEventListener('pointerdown', (event) => {
+                    if (event.pointerType === 'mouse' && event.button !== 0) return;
+                    stopAnimation();
+                    pointerDown = true;
+                    dragAxis = null;
+                    pointerStartX = event.clientX;
+                    pointerStartY = event.clientY;
+                    pointerStartScroll = gallery.scrollLeft;
+                    gallery.classList.add('dragging');
+                    gallery.setPointerCapture?.(event.pointerId);
+                });
+
+                gallery.addEventListener('pointermove', (event) => {
+                    if (!pointerDown) return;
+                    const dx = event.clientX - pointerStartX;
+                    const dy = event.clientY - pointerStartY;
+                    if (!dragAxis) {
+                        if (Math.abs(dx) < 5 && Math.abs(dy) < 5) return;
+                        dragAxis = Math.abs(dx) >= Math.abs(dy) ? 'x' : 'y';
+                    }
+                    if (dragAxis !== 'x') return;
+                    event.preventDefault();
+                    gallery.scrollLeft = pointerStartScroll - dx;
+                });
+
+                const releasePointer = (event) => {
+                    if (!pointerDown) return;
+                    pointerDown = false;
+                    gallery.classList.remove('dragging');
+                    if (dragAxis === 'x') {
+                        const index = Math.round(gallery.scrollLeft / Math.max(1, gallery.clientWidth));
+                        smoothTo(index * gallery.clientWidth);
+                    }
+                    gallery.releasePointerCapture?.(event.pointerId);
+                    dragAxis = null;
+                };
+                gallery.addEventListener('pointerup', releasePointer);
+                gallery.addEventListener('pointercancel', releasePointer);
+                gallery.addEventListener('lostpointercapture', () => {
+                    if (pointerDown) { pointerDown = false;
+                        gallery.classList.remove('dragging');
+                        dragAxis = null; }
+                });
+
+                // Button clicks
+                dots.forEach((dot, index) => {
+                    dot.addEventListener('click', () => smoothTo(index * gallery.clientWidth));
+                });
+                if (prevBtn) {
+                    prevBtn.addEventListener('click', () => {
+                        const idx = clamp(currentIndex - 1, 0, slides.length - 1);
+                        smoothTo(idx * gallery.clientWidth);
+                    });
+                }
+                if (nextBtn) {
+                    nextBtn.addEventListener('click', () => {
+                        const idx = clamp(currentIndex + 1, 0, slides.length - 1);
+                        smoothTo(idx * gallery.clientWidth);
+                    });
+                }
+
+                // Parallax update
+                function update() {
+                    const width = Math.max(gallery.clientWidth, 1);
+                    const raw = gallery.scrollLeft / width;
+                    const index = clamp(Math.round(raw), 0, slides.length - 1);
+                    setActive(index);
+                    slides.forEach((slide, i) => {
+                        const delta = i - raw;
+                        const distance = clamp(delta, -1, 1);
+                        const px = distance * 34;
+                        const scale = 1 + Math.max(0, 1 - Math.abs(distance)) * 0.015;
+                        const opacity = 0.78 + Math.max(0, 1 - Math.abs(distance)) * 0.22;
+                        slide.style.setProperty('--px', `${px}px`);
+                        slide.style.setProperty('--py', `${(Math.abs(distance) * -3).toFixed(1)}px`);
+                        slide.style.setProperty('--slide-scale', scale.toFixed(3));
+                        slide.style.setProperty('--slide-opacity', opacity.toFixed(3));
+                    });
+                }
+
+                gallery.addEventListener('scroll', () => {
+                    if (!animFrame) targetX = gallery.scrollLeft;
+                    update();
+                }, { passive: true });
+                window.addEventListener('resize', resizeSlides, { passive: true });
+                resizeSlides();
+                gallery.classList.add('ready');
+                update();
+            }
+
+            galleries.forEach(setupGallery);
+
+            // ── Vertical Scroll State ──
+            let activeIndex = -1;
+            let scrollTick = false;
+            const scrollProgressEl = scrollProgress;
+
+            function updateFromScroll() {
+                const h = scroller.clientHeight || window.innerHeight;
+                const index = Math.max(0, Math.min(sections.length - 1, Math.round(scroller.scrollTop / Math.max(h,
+                    1))));
+                if (index !== activeIndex) {
+                    activeIndex = index;
+                    const work = sections[index]?.dataset.work || String(index + 1);
+                    workNoTop.textContent = `WORK_NO:${work}`;
+                    document.title = `WORK_NO:${work} | Portfolio`;
+                    const cs = getComputedStyle(sections[index]);
+                    ['--section-bg', '--text-color', '--muted-color', '--link-color', '--accent-color',
+                        '--accent-rgb', '--accent-contrast', '--catalog-a', '--catalog-b'
+                    ].forEach(v => {
+                        const value = cs.getPropertyValue(v).trim();
+                        if (value) document.documentElement.style.setProperty(v, value);
+                    });
+                }
+                // Update scroll progress
+                const maxScroll = scroller.scrollHeight - scroller.clientHeight;
+                const progress = maxScroll > 0 ? (scroller.scrollTop / maxScroll) * 100 : 0;
+                scrollProgressEl.style.width = `${progress}%`;
+                scrollTick = false;
+            }
+
+            scroller.addEventListener('scroll', () => {
+                if (!scrollTick) { requestAnimationFrame(updateFromScroll);
+                    scrollTick = true; }
+            }, { passive: true });
+            window.addEventListener('resize', updateFromScroll, { passive: true });
+            updateFromScroll();
+
+            // ── Page Transition Links ──
+            const navType = performance.getEntriesByType('navigation')[0]?.type;
+            if (navType === 'reload') document.body.style.animation = 'none';
+
+            document.querySelectorAll('.transition-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const url = this.href;
+                    document.body.style.transition =
+                        'transform 0.5s cubic-bezier(0.7,0,0.84,0), opacity 0.5s cubic-bezier(0.7,0,0.84,0)';
+                    document.body.style.transform = 'translateY(-100vh)';
+                    document.body.style.opacity = '0';
+                    setTimeout(() => { window.location.href = url; }, 480);
+                });
+            });
+
+            // ── Reduced Motion ──
+            if (reducedMotion) {
+                document.querySelectorAll('.transition-content').forEach(el => el.classList.add('visible'));
+                document.querySelectorAll('.h1-char').forEach(char => {
+                    char.style.opacity = '1';
+                    char.style.transform = 'none';
+                    char.style.filter = 'none';
+                });
+            }
+
+            // ── Keyboard: Section navigation ──
+            document.addEventListener('keydown', (e) => {
+                // Don't interfere with gallery keyboard navigation
+                if (e.target.closest('.horizontal-gallery')) return;
+                if (e.target.closest('.gallery-ui')) return;
+                if (e.target.closest('.nav-links-wrapper')) return;
+
+                if (e.key === 'PageDown' || e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    const next = Math.min(sections.length - 1, activeIndex + 1);
+                    sections[next]?.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth' });
+                } else if (e.key === 'PageUp' || e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    const prev = Math.max(0, activeIndex - 1);
+                    sections[prev]?.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth' });
+                }
+            });
+
+            console.log('Portfolio enhanced – smoother galleries, better accessibility, optimized performance.');
+        })();
+    </script>
+</body>
+</html>

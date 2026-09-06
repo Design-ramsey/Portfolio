@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <style>
+        :root {
+            --section-bg: #808080;
+            --text-color: #fff;
+            --muted-color: #eee;
+            --link-color: #fff;
+            --accent-color: #fff;
+            --accent-rgb: 255, 255, 255;
+            --accent-contrast: #111;
+            --parallax-x: 0px;
+            --parallax-scale: 1;
+            --scroll-progress: 0;
+        }
+        * {
+            margin: 0;
+            box-sizing: border-box;
+            font-family: 'Google Sans', Lora, sans-serif;
+            scrollbar-width: none;
+        }
+        *::-webkit-scrollbar {
+            display: none;
+        }
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        body {
+            background: var(--section-bg);
+            color: var(--text-color);
+            animation: slideInUp .6s cubic-bezier(.16, 1, .3, 1) forwards;
+            transition: background-color .6s, color .45s;
+        }
+        body.slide-out-up {
+            animation: slideOutUp .5s cubic-bezier(.7, 0, .84, 0) forwards;
+        }
+        @keyframes slideInUp {
+            from {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        @keyframes slideOutUp {
+            from {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(-100vh);
+                opacity: 0;
+            }
+        }
+        h1,
+        h2,
+        h3,
+        p,
+        a,
+        li,
+        button {
+            color: var(--text-color);
+        }
+        h1 {
+            font-weight: 1000;
+            font-size: clamp(2.8rem, 8vw, 5em);
+            line-height: .95;
+            letter-spacing: -.045em;
+            position: relative;
+            z-index: 3;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 5rem;
+            padding: 0 5rem;
+            width: 100%;
+            z-index: 100;
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+        .navigation>* {
+            pointer-events: auto;
+        }
+        .list {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            list-style: none;
+            font-size: 1em;
+            font-weight: 500;
+        }
+        .socials {
+            font-size: .75em;
+            display: inline-flex;
+            gap: 1rem;
+            list-style: none;
+        }
+        .container {
+            height: 100vh;
+            width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            position: relative;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            background: var(--section-bg);
+            transition: background-color .6s;
+            display: flex;
+            flex-direction: row;
+            will-change: scroll-position;
+            -webkit-overflow-scrolling: touch;
+        }
+        .section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            min-width: 100vw;
+            height: 100vh;
+            flex-shrink: 0;
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+            position: relative;
+            overflow: hidden;
+            isolation: isolate;
+            background: var(--section-bg);
+            color: var(--text-color);
+            transition: background-color .7s, color .5s;
+        }
+        .section:before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: color-mix(in srgb, var(--section-bg) 18%, transparent);
+            opacity: .38;
+            z-index: -1;
+            pointer-events: none;
+        }
+        .transition-content {
+            width: min(1000px, 88vw);
+            height: min(700px, 72vh);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 1;
+            transform: translateY(40px) scale(.93);
+            filter: saturate(.78) brightness(.58);
+            transition: transform .9s cubic-bezier(.16, 1, .3, 1), filter .9s cubic-bezier(.16, 1, .3, 1), opacity .7s ease;
+            will-change: transform, filter, opacity;
+        }
+        .transition-content.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            filter: saturate(1) brightness(1);
+        }
+        .content {
+            width: 100%;
+            height: 100%;
+            max-width: 1200px;
+            max-height: 700px;
+            position: absolute;
+            inset: 50% auto auto 50%;
+            z-index: -1;
+            transform: translate(-50%, -50%);
+            overflow: hidden;
+            border-radius: 2px;
+        }
+        .content:after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+        .content img {
+            display: block;
+            width: 118%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transform: translateX(var(--parallax-x, 0px)) scale(var(--parallax-scale, 1));
+            transition: transform .12s cubic-bezier(.25, .8, .35, 1), filter .8s;
+            will-change: transform, filter;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        .transition-content.visible .content img {
+            --parallax-scale: 1.025;
+        }
+        a {
+            color: var(--link-color);
+            text-decoration: none;
+            position: relative;
+            transition: color .35s, opacity .3s;
+        }
+        a:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -1px;
+            width: 0;
+            height: 2px;
+            border-radius: 999px;
+            background: var(--accent-color);
+            transition: width .3s, background-color .35s;
+        }
+        a:hover:after,
+        a:focus-visible:after {
+            width: 100%;
+        }
+        a:hover,
+        a:focus-visible {
+            opacity: .8;
+        }
+        .h1-char {
+            display: inline-block;
+            opacity: 0;
+            transform: translate3d(var(--sx), var(--sy), 0) rotate(var(--sr)) scale(.65);
+            filter: blur(6px);
+            will-change: transform, opacity, filter;
+        }
+        .transition-content.visible .h1-char {
+            animation: assembleChar .6s cubic-bezier(.16, 1, .3, 1) forwards;
+            animation-delay: var(--delay);
+        }
+        @keyframes assembleChar {
+            0% {
+                opacity: 0;
+                transform: translate3d(var(--sx), var(--sy), 0) rotate(var(--sr)) scale(.65);
+                filter: blur(6px);
+            }
+            55% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 1;
+                transform: translate3d(0, 0, 0) rotate(0) scale(1);
+                filter: blur(0);
+            }
+        }
+        @keyframes disappearH1 {
+            0% {
+                opacity: 1;
+                transform: translate3d(0, 0, 0) rotate(0) scale(1);
+                filter: blur(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translate3d(0, -18px, 0) scale(.96);
+                filter: blur(4px);
+            }
+        }
+        .transition-content:not(.visible) .h1-char {
+            opacity: 0;
+            transform: translate3d(var(--ex), var(--ey), 0) rotate(var(--er)) scale(.7);
+            filter: blur(5px);
+            transition: opacity .22s, transform .28s, filter .25s;
+        }
+        .catalog {
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            background-image: linear-gradient(90deg, var(--catalog-a, #ff8a00), var(--catalog-b, #e52e71), var(--catalog-a, #ff8a00));
+            background-size: 200% auto;
+            animation: shimmer 3s linear infinite;
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, .24));
+        }
+        .catalog:after {
+            background: linear-gradient(90deg, var(--catalog-a, #ff8a00), var(--catalog-b, #e52e71));
+        }
+        @keyframes shimmer {
+            to {
+                background-position: 200% center;
+            }
+        }
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            position: fixed;
+            padding: 1rem 5rem;
+            left: 0;
+            bottom: 0;
+            z-index: 100;
+            pointer-events: none;
+        }
+        .footer>* {
+            pointer-events: auto;
+        }
+        .footer_list {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            list-style: none;
+            font-size: 1em;
+            font-weight: 400;
+        }
+        .work_button {
+            color: var(--accent-contrast);
+            background: var(--accent-color);
+            border-radius: 25px;
+            padding: 10px 18px;
+            min-width: 150px;
+            border: 1px solid rgba(var(--accent-rgb), .2);
+            cursor: pointer;
+            transition: transform .3s, background-color .35s, color .35s;
+            font-weight: 600;
+            letter-spacing: .02em;
+        }
+        .work_button:hover,
+        .work_button:focus-visible {
+            transform: scale(1.08);
+            background: var(--text-color);
+            color: var(--section-bg);
+        }
+        .copy_right p {
+            color: var(--muted-color);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, .22);
+        }
+        .section-index {
+            position: absolute;
+            top: 50%;
+            right: 2rem;
+            transform: translateY(-50%);
+            z-index: 5;
+            font-size: .68rem;
+            font-weight: 600;
+            letter-spacing: .14em;
+            opacity: .72;
+            transition: opacity .5s;
+        }
+        .scroll-progress {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            z-index: 200;
+            pointer-events: none;
+            background: rgba(255, 255, 255, .08);
+            border-radius: 0 2px 0 0;
+        }
+        .scroll-progress-bar {
+            height: 100%;
+            width: 0%;
+            background: var(--accent-color);
+            border-radius: 0 2px 0 0;
+            transition: width .1s linear, background-color .5s;
+        }
+        .arrow-nav {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 150;
+            pointer-events: none;
+        }
+        .arrow-nav button {
+            pointer-events: auto;
+            background: rgba(0, 0, 0, .45);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, .2);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background .3s, transform .3s, opacity .3s;
+            opacity: .65;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        .arrow-nav button:hover,
+        .arrow-nav button:focus-visible {
+            background: rgba(0, 0, 0, .7);
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        .arrow-nav button:disabled {
+            opacity: .2;
+            cursor: default;
+            transform: none;
+            background: rgba(0, 0, 0, .3);
+        }
+        .arrow-nav.left {
+            left: 1.2rem;
+        }
+        .arrow-nav.right {
+            right: 1.2rem;
+        }
+        .scroll-hint {
+            position: fixed;
+            bottom: 4.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 90;
+            font-size: .7rem;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            color: var(--muted-color);
+            opacity: .6;
+            pointer-events: none;
+            animation: hintPulse 2.5s ease-in-out infinite;
+        }
+        @keyframes hintPulse {
+            0%,
+            100% {
+                opacity: .3;
+                transform: translateX(-50%) translateY(0);
+            }
+            50% {
+                opacity: .8;
+                transform: translateX(-50%) translateY(-6px);
+            }
+        }
+        @media(max-width:900px) {
+            .navigation {
+                padding: 0 1.25rem;
+            }
+            .list {
+                gap: 1rem;
+                font-size: .85rem;
+            }
+            .socials {
+                display: none;
+            }
+            .footer {
+                padding: 1rem 1.25rem;
+                gap: .8rem;
+            }
+            .footer_list {
+                gap: .8rem;
+                font-size: .82rem;
+            }
+            .copy_right {
+                display: none;
+            }
+            .transition-content {
+                width: 94vw;
+                height: 68vh;
+            }
+            .section-index {
+                right: .8rem;
+                font-size: .58rem;
+            }
+            .arrow-nav button {
+                width: 38px;
+                height: 38px;
+                font-size: 1.1rem;
+            }
+            .arrow-nav.left {
+                left: .6rem;
+            }
+            .arrow-nav.right {
+                right: .6rem;
+            }
+        }
+        @media(prefers-reduced-motion:reduce) {
+            *,
+            *:before,
+            *:after {
+                animation-duration: .001ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+                transition-duration: .001ms !important;
+            }
+            .scroll-hint {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navigation">
+        <div><h3 id="workNoTop" style="font-size:1rem;font-weight:700;letter-spacing:.06em;">WORK_NO:1</h3></div>
+        <nav>
+            <ul class="list">
+                <li><a href="index.html" class="transition-link">Home</a></li>
+                <li><a href="portfolio.html" class="transition-link">Portfolio</a></li>
+                <li><a href="#about">About Designer</a></li>
+            </ul>
+        </nav>
+        <div>
+            <ul class="socials">
+                <li><a href="#linkedin">LinkedIn</a></li>
+                <li><a href="#behance">Behance</a></li>
+                <li><a href="#mail">Mail</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="arrow-nav left">
+        <button id="prevBtn" type="button" aria-label="Previous section" disabled>&#10094;</button>
+    </div>
+    <div class="arrow-nav right">
+        <button id="nextBtn" type="button" aria-label="Next section">&#10095;</button>
+    </div>
+
+    <main class="container" id="portfolioScroller">
+        <!-- Section 1 -->
+        <section class="section object_1" data-work="1">
+            <div class="transition-content">
+                <h1 data-assemble="WORK_NO:1">WORK_NO:1</h1>
+                <div class="content"><img src="images/Branding & Identity/TerraVibe/DL_Flyer_with_the_Keyboard.jpg" alt="IMG_1" data-parallax="0.35"></div>
+            </div>
+            <div class="section-index" aria-hidden="true">01 / 09</div>
+        </section>
+        <!-- Section 2 -->
+        <section class="section object_2" data-work="2">
+            <div class="transition-content">
+                <h1 data-assemble="WORK_NO:2">WORK_NO:2</h1>
+                <div class="content"><img src="images/Branding & Identity/TerraVibe/backpack_linen_og.jpg" alt="IMG_2" data-parallax="0.55"></div>
+            </div>
+            <div class="section-index" aria-hidden="true">02 / 09</div>
+        </section>
+        <!-- Section 3 -->
+        <section class="section object_3" data-work="3">
+            <div class="transition-content">
+                <h1 data-assemble="WORK_NO:3">WORK_NO:3</h1>
+                <div class="content"><img src="images/Branding & Identity/TerraVibe/road_bike_1_1.jpg" alt="IMG_3" data-parallax="0.42"></div>
+            </div>
+            <div class="section-index" aria-hidden="true">03 / 09</div>
+        </section>
+        <!-- Section 4 -->
+        <section class="section object_4" data-work="4">
+            <div class="transition-content">
+                <h1 data-assemble="WORK_NO:4">WORK_NO:4</h1>
+                <div class="content"><img src="images/Branding & Identity/TerraVibe/skateboard_f&b.jpg" alt="IMG_4" data-parallax="0.62"></div>
+            </div>
+            <div class="section-index" aria-hidden="true">04 / 09</div>
+        </section>
+        <!-- Section 5 -->
+        <section class="section object_5" data-work="5">
+            <div class="transition-content">
+                <h1 data-assemble="WORK_NO:5">WORK_NO:5</h1>
+                <div class="content"><img src="images/Branding & Identity/TerraVibe/chopsticks_mockup_4.jpg" alt="IMG_5" data-parallax="0.28"></div>
+            </div>
+            <div class="section-index" aria-hidden="true">05 / 09</div>
+        </section>
+        <!-- Section 6 -->
+        <section class="section object_6" data-work="6">
+            <div class="transition-content">
+                <h1 data-assemble="WORK_NO:6">WORK_NO:6</h1>
+                <div class="content"><img src="images/Branding & Identity/TerraVibe/women's_shirt_front.jpg" alt="IMG_6" data-parallax="0.48"></div>
+            </div>
+            <div class="section-index" aria-hidden="true">06 / 09</div>
+        </section>
+        <!-- Section 7 -->
+        <section class="section object_7" data-work="7">
+            <div class="transition-content">
+                <h1 data-assemble="WORK_NO:7">WORK_NO:7</h1>
+                <div class="content"><img src="images/Branding & Identity/TerraVibe/DL_Flyer_with_the_Keyboard.jpg" alt="IMG_7" data-parallax="0.5"></div>
+            </div>
+            <div class="section-index" aria-hidden="true">07 / 09</div>
+        </section>
+        <!-- Section 8 -->
+        <section class="section object_8" data-work="8">
+            <div class="transition-content">
+                <h1 data-assemble="WORK_NO:8">WORK_NO:8</h1>
+                <div class="content"><img src="images/Branding & Identity/TerraVibe/backpack_linen_og.jpg" alt="IMG_8" data-parallax="0.3"></div>
+            </div>
+            <div class="section-index" aria-hidden="true">08 / 09</div>
+        </section>
+        <!-- Section 9 -->
+        <section class="section object_9" data-work="9">
+            <div class="transition-content">
+                <h1 data-assemble="WORK_NO:9">WORK_NO:9</h1>
+                <div class="content"><img src="images/Branding & Identity/TerraVibe/road_bike_1_1.jpg" alt="IMG_9" data-parallax="0.57"></div>
+            </div>
+            <div class="section-index" aria-hidden="true">09 / 09</div>
+        </section>
+    </main>
+
+    <div class="scroll-hint">Scroll Horizontally &#8594;</div>
+
+    <div class="scroll-progress"><div class="scroll-progress-bar" id="scrollProgressBar"></div></div>
+
+    <div class="footer">
+        <div><button class="work_button" type="button">Hire My Skills</button></div>
+        <div>
+            <ul class="footer_list">
+                <li><a href="selected_works.html" class="transition-link">Selected Works</a></li>
+                <li><a class="catalog" href="catalog.html">Catalog</a></li>
+                <li><a href="#overview" class="list_portfolio">Get In Touch</a></li>
+            </ul>
+        </div>
+        <div class="copy_right"><p style="font-size:.8rem">&copy; 2026 Ramsey Asiedu</p></div>
+    </div>
+
+    <script>
+        const scroller = document.getElementById('portfolioScroller');
+        const workNoTop = document.getElementById('workNoTop');
+        const sections = [...document.querySelectorAll('.section')];
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const progressBar = document.getElementById('scrollProgressBar');
+        const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        const navType = performance.getEntriesByType('navigation')[0]?.type;
+        if (navType === 'reload') document.body.style.animation = 'none';
+
+        // Character assembly/disassembly
+        document.querySelectorAll('[data-assemble]').forEach((heading) => {
+            const text = heading.dataset.assemble;
+            heading.setAttribute('aria-label', text);
+            heading.textContent = '';
+            [...text].forEach((char, i) => {
+                const s = document.createElement('span');
+                s.className = 'h1-char';
+                s.setAttribute('aria-hidden', 'true');
+                s.textContent = char === ' ' ? '\u00A0' : char;
+                const a = (i * 37) % 360;
+                const d = 90 + (i * 19) % 90;
+                const rad = a * Math.PI / 180;
+                const sr = (i % 2 ? -1 : 1) * (4 + (i % 5) * 2);
+                const ea = ((a + 145) % 360) * Math.PI / 180;
+                const ed = 80 + (i * 17) % 100;
+                s.style.setProperty('--sx', `${(Math.cos(rad) * d).toFixed(1)}px`);
+                s.style.setProperty('--sy', `${(Math.sin(rad) * d).toFixed(1)}px`);
+                s.style.setProperty('--sr', `${sr}deg`);
+                s.style.setProperty('--ex', `${(Math.cos(ea) * ed).toFixed(1)}px`);
+                s.style.setProperty('--ey', `${(Math.sin(ea) * ed).toFixed(1)}px`);
+                s.style.setProperty('--er', `${-sr * 1.5}deg`);
+                s.style.setProperty('--delay', `${(i * .022).toFixed(3)}s`);
+                heading.appendChild(s);
+            });
+        });
+
+        // IntersectionObserver for visibility - works with horizontal scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((e) => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('visible');
+                } else {
+                    e.target.classList.remove('visible');
+                }
+            });
+        }, {
+            root: scroller,
+            threshold: .35,
+            rootMargin: '0px -10% 0px -10%'
+        });
+        document.querySelectorAll('.transition-content').forEach((el) => observer.observe(el));
+
+        // Color extraction
+        function getDominantColor(img) {
+            return new Promise((resolve) => {
+                const c = document.createElement('canvas');
+                const x = c.getContext('2d', { willReadFrequently: true });
+                if (!x || !img.complete || !img.naturalWidth) return resolve(null);
+                c.width = c.height = 48;
+                try {
+                    x.drawImage(img, 0, 0, 48, 48);
+                    const p = x.getImageData(0, 0, 48, 48).data;
+                    const bins = new Map();
+                    for (let i = 0; i < p.length; i += 4) {
+                        if (p[i + 3] < 170) continue;
+                        let r = p[i],
+                            g = p[i + 1],
+                            b = p[i + 2];
+                        const max = Math.max(r, g, b),
+                            min = Math.min(r, g, b);
+                        const l = (max + min) / 510;
+                        if (max < 20 || min > 238) continue;
+                        r = Math.min(255, Math.round(r / 16) * 16);
+                        g = Math.min(255, Math.round(g / 16) * 16);
+                        b = Math.min(255, Math.round(b / 16) * 16);
+                        const k = `${r},${g},${b}`;
+                        const w = 1 + (1 - Math.abs(l - .5)) * 1.3;
+                        bins.set(k, (bins.get(k) || 0) + w);
+                    }
+                    const w = [...bins.entries()].sort((a, b) => b[1] - a[1])[0];
+                    resolve(w ? Object.fromEntries(['r', 'g', 'b'].map((k, i) => [k, Number(w[0].split(',')[i])])) : null);
+                } catch (e) { resolve(null); }
+            });
+        }
+
+        function rgbToHsl(r, g, b) {
+            r /= 255;
+            g /= 255;
+            b /= 255;
+            const mx = Math.max(r, g, b),
+                mn = Math.min(r, g, b),
+                d = mx - mn,
+                l = (mx + mn) / 2;
+            let h = 0,
+                s = 0;
+            if (d) {
+                s = l > .5 ? d / (2 - mx - mn) : d / (mx + mn);
+                switch (mx) {
+                    case r:
+                        h = (g - b) / d + (g < b ? 6 : 0);
+                        break;
+                    case g:
+                        h = (b - r) / d + 2;
+                        break;
+                    default:
+                        h = (r - g) / d + 4;
+                }
+                h /= 6;
+            }
+            return [h * 360, s * 100, l * 100];
+        }
+
+        function hslToRgb(h, s, l) {
+            h = ((h % 360) + 360) % 360 / 360;
+            s /= 100;
+            l /= 100;
+            if (!s) {
+                const v = Math.round(l * 255);
+                return [v, v, v];
+            }
+            const q = l < .5 ? l * (1 + s) : l + s - l * s,
+                p = 2 * l - q;
+            const f = (p, q, t) => {
+                if (t < 0) t += 1;
+                if (t > 1) t -= 1;
+                if (t < 1 / 6) return p + (q - p) * 6 * t;
+                if (t < 1 / 2) return q;
+                if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+                return p;
+            };
+            return [Math.round(f(p, q, h + 1 / 3) * 255), Math.round(f(p, q, h) * 255), Math.round(f(p, q, h - 1 / 3) *
+                255)];
+        }
+
+        function lum(r, g, b) {
+            return [r, g, b].map((v) => {
+                v /= 255;
+                return v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4);
+            }).reduce((a, v, i) => a + v * [.2126, .7152, .0722][i], 0);
+        }
+
+        function contrast(a, b) {
+            const x = lum(...a),
+                y = lum(...b);
+            return (Math.max(x, y) + .05) / (Math.min(x, y) + .05);
+        }
+
+        function readableComplement(r, g, b) {
+            const [h, s, l] = rgbToHsl(r, g, b),
+                bg = [r, g, b];
+            const candidates = [
+                hslToRgb(h + 180, Math.min(92, Math.max(48, s + 15)), 34),
+                hslToRgb(h + 180, Math.min(82, Math.max(38, s + 8)), 68), [255, 255, 255],
+                [17, 17, 17]
+            ];
+            const sorted = candidates.filter((x) => contrast(x, bg) >= 4.5).sort((a, b) => contrast(b, bg) - contrast(a,
+            bg));
+            return sorted[0] || (l > 55 ? [17, 17, 17] : [255, 255, 255]);
+        }
+
+        function setSectionColor(section, rgb) {
+            if (!rgb) return;
+            const { r, g, b } = rgb;
+            const bg = `rgb(${r}, ${g}, ${b})`;
+            const t = readableComplement(r, g, b);
+            const th = `#${t.map((v) => v.toString(16).padStart(2, '0')).join('')}`;
+            const [h, s, l] = rgbToHsl(r, g, b);
+            const ac = hslToRgb(h + 180, Math.min(88, Math.max(55, s)), Math.min(78, Math.max(42, l > 50 ? l - 10 : l +
+                15)));
+            const ah = `#${ac.map((v) => v.toString(16).padStart(2, '0')).join('')}`;
+            section.style.setProperty('--section-bg', bg);
+            section.style.setProperty('--text-color', th);
+            section.style.setProperty('--muted-color', contrast(t, [r, g, b]) >= 7 ? th : 'rgba(255,255,255,.82)');
+            section.style.setProperty('--link-color', th);
+            section.style.setProperty('--accent-color', ah);
+            section.style.setProperty('--accent-rgb', ac.join(', '));
+            section.style.setProperty('--accent-contrast', contrast([17, 17, 17], ac) >= 4.5 ? '#111' : '#fff');
+            section.style.setProperty('--catalog-a', ah);
+            section.style.setProperty('--catalog-b', th);
+        }
+
+        async function applyImageColor(section) {
+            const img = section.querySelector('img');
+            if (!img) return;
+            if (!img.complete) {
+                await new Promise((r) => {
+                    img.addEventListener('load', r, { once: true });
+                    img.addEventListener('error', r, { once: true });
+                });
+            }
+            setSectionColor(section, await getDominantColor(img));
+        }
+        sections.forEach(applyImageColor);
+
+        // --- Parallax & Active Section Tracking ---
+        let activeIndex = -1;
+        let scrollTick = false;
+        let parallaxTick = false;
+        let targetScrollLeft = 0;
+        let currentScrollLeft = 0;
+        let isSmoothScrolling = false;
+        let smoothScrollStart = 0;
+        let smoothScrollTarget = 0;
+        let smoothScrollDuration = 0;
+        let smoothScrollStartTime = 0;
+        let smoothScrollId = null;
+
+        function getViewportWidth() {
+            return scroller.clientWidth || window.innerWidth;
+        }
+
+        function getMaxScrollLeft() {
+            return scroller.scrollWidth - scroller.clientWidth;
+        }
+
+        function updateParallax() {
+            const viewportWidth = getViewportWidth();
+            const scrollLeft = scroller.scrollLeft;
+            const containerRect = scroller.getBoundingClientRect();
+
+            sections.forEach((section) => {
+                const rect = section.getBoundingClientRect();
+                // Calculate how far the section's center is from the viewport center
+                const sectionCenterX = rect.left + rect.width / 2;
+                const viewportCenterX = containerRect.left + containerRect.width / 2;
+                const offset = (sectionCenterX - viewportCenterX) / viewportWidth; // -1 to 1
+
+                const img = section.querySelector('.content img');
+                if (img) {
+                    const speed = parseFloat(img.dataset.parallax || '0.3');
+                    const maxShift = viewportWidth * 0.08; // Max 8% of viewport width
+                    const px = -offset * speed * maxShift;
+                    img.style.setProperty('--parallax-x', `${px.toFixed(1)}px`);
+                }
+            });
+            parallaxTick = false;
+        }
+
+        function updateActiveSection() {
+            const viewportWidth = getViewportWidth();
+            const scrollLeft = scroller.scrollLeft;
+            const index = Math.max(0, Math.min(sections.length - 1, Math.round(scrollLeft / viewportWidth)));
+
+            if (index !== activeIndex) {
+                activeIndex = index;
+                const section = sections[index];
+                const w = section?.dataset.work || String(index + 1);
+                workNoTop.textContent = `WORK_NO:${w}`;
+                document.title = `WORK_NO:${w} | Portfolio`;
+
+                // Update global CSS variables from the active section
+                const cs = getComputedStyle(section);
+                ['--section-bg', '--text-color', '--muted-color', '--link-color', '--accent-color', '--accent-rgb',
+                    '--accent-contrast', '--catalog-a', '--catalog-b'
+                ].forEach((v) => {
+                    const value = cs.getPropertyValue(v).trim();
+                    if (value) document.documentElement.style.setProperty(v, value);
+                });
+
+                // Update arrow button states
+                updateArrowButtons();
+            }
+
+            // Update progress bar
+            const maxScroll = getMaxScrollLeft();
+            const progress = maxScroll > 0 ? (scrollLeft / maxScroll) * 100 : 0;
+            progressBar.style.width = `${progress}%`;
+
+            scrollTick = false;
+        }
+
+        function updateArrowButtons() {
+            prevBtn.disabled = activeIndex <= 0;
+            nextBtn.disabled = activeIndex >= sections.length - 1;
+        }
+
+        function onScroll() {
+            if (!scrollTick) {
+                requestAnimationFrame(updateActiveSection);
+                scrollTick = true;
+            }
+            if (!parallaxTick) {
+                requestAnimationFrame(updateParallax);
+                parallaxTick = true;
+            }
+        }
+
+        scroller.addEventListener('scroll', onScroll, { passive: true });
+
+        function smoothScrollTo(targetX) {
+            const startX = scroller.scrollLeft;
+            const maxScroll = getMaxScrollLeft();
+            targetX = Math.max(0, Math.min(maxScroll, targetX));
+            const dist = targetX - startX;
+            if (Math.abs(dist) < 1) return;
+
+            const duration = Math.min(900, Math.max(400, Math.abs(dist) * 0.8));
+            const startTime = performance.now();
+
+            if (smoothScrollId) cancelAnimationFrame(smoothScrollId);
+
+            function step(now) {
+                const elapsed = now - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                // Ease in-out cubic
+                const eased = progress < .5 ?
+                    4 * progress * progress * progress :
+                    1 - Math.pow(-2 * progress + 2, 3) / 2;
+                scroller.scrollLeft = startX + dist * eased;
+                if (progress < 1) {
+                    smoothScrollId = requestAnimationFrame(step);
+                } else {
+                    smoothScrollId = null;
+                    isSmoothScrolling = false;
+                }
+            }
+            isSmoothScrolling = true;
+            smoothScrollId = requestAnimationFrame(step);
+        }
+
+        function goToSection(index) {
+            index = Math.max(0, Math.min(sections.length - 1, index));
+            const targetX = index * getViewportWidth();
+            smoothScrollTo(targetX);
+        }
+
+        prevBtn.addEventListener('click', () => {
+            if (activeIndex > 0) goToSection(activeIndex - 1);
+        });
+        nextBtn.addEventListener('click', () => {
+            if (activeIndex < sections.length - 1) goToSection(activeIndex + 1);
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                if (activeIndex > 0) goToSection(activeIndex - 1);
+            } else if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                if (activeIndex < sections.length - 1) goToSection(activeIndex + 1);
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                goToSection(0);
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                goToSection(sections.length - 1);
+            } else if (e.key === 'PageDown') {
+                e.preventDefault();
+                goToSection(activeIndex + 1);
+            } else if (e.key === 'PageUp') {
+                e.preventDefault();
+                goToSection(activeIndex - 1);
+            }
+        });
+
+        // Touch swipe handling for smoother mobile experience
+        let touchStartX = 0;
+        let touchEndX = 0;
+        let isSwiping = false;
+        scroller.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+            isSwiping = true;
+        }, { passive: true });
+        scroller.addEventListener('touchmove', (e) => {
+            if (isSwiping) touchEndX = e.touches[0].clientX;
+        }, { passive: true });
+        scroller.addEventListener('touchend', () => {
+            if (isSwiping) {
+                const diff = touchStartX - touchEndX;
+                const threshold = 50;
+                if (Math.abs(diff) > threshold) {
+                    if (diff > 0 && activeIndex < sections.length - 1) {
+                        goToSection(activeIndex + 1);
+                    } else if (diff < 0 && activeIndex > 0) {
+                        goToSection(activeIndex - 1);
+                    }
+                }
+                isSwiping = false;
+            }
+        }, { passive: true });
+
+        // Wheel event for smoother scrolling (optional enhancement)
+        let wheelTimeout = null;
+        scroller.addEventListener('wheel', (e) => {
+            // Only intercept if delta is significant and not already smooth scrolling
+            if (Math.abs(e.deltaX) > 30 && !isSmoothScrolling) {
+                e.preventDefault();
+                const direction = e.deltaX > 0 ? 1 : -1;
+                goToSection(activeIndex + direction);
+            } else if (Math.abs(e.deltaY) > 30 && Math.abs(e.deltaX) < 10 && !isSmoothScrolling) {
+                // Vertical wheel on horizontal scroller
+                e.preventDefault();
+                const direction = e.deltaY > 0 ? 1 : -1;
+                goToSection(activeIndex + direction);
+            }
+        }, { passive: false });
+
+        // Initialize
+        function init() {
+            updateActiveSection();
+            updateParallax();
+            updateArrowButtons();
+            if (reducedMotion) {
+                document.querySelectorAll('.transition-content').forEach((el) => el.classList.add('visible'));
+                document.querySelector('.scroll-hint').style.display = 'none';
+            }
+        }
+
+        // Handle resize
+        let resizeTimeout = null;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                updateActiveSection();
+                updateParallax();
+                updateArrowButtons();
+                // Re-snap to current section
+                const targetX = activeIndex * getViewportWidth();
+                scroller.scrollLeft = targetX;
+            }, 150);
+        }, { passive: true });
+
+        // Page transition links
+        document.querySelectorAll('.transition-link').forEach((link) => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const u = this.href;
+                document.body.classList.add('slide-out-up');
+                setTimeout(() => location.href = u, 500);
+            });
+        });
+
+        // Initialize immediately and on load
+        if (document.readyState === 'complete') {
+            init();
+        } else {
+            window.addEventListener('load', init);
+        }
+        // Also run init right away for faster feedback
+        requestAnimationFrame(() => {
+            updateActiveSection();
+            updateParallax();
+            updateArrowButtons();
+        });
+
+        // Force a parallax refresh after images load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                updateParallax();
+                sections.forEach(applyImageColor);
+            }, 300);
+        });
+    </script>
+</body>
+</html>

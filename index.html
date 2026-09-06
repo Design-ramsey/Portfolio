@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asiedu Ramsey</title>
+    <style>
+        * {
+            font-family: 'Google Sans', Lora, sans-serif;
+            scrollbar-width: none;
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #ffffff;
+            height: 100vh;
+            width: 100%;
+            overflow-x: hidden;
+            animation: slideInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .slide-out-up {
+            animation: slideOutUp 0.5s cubic-bezier(0.7, 0, 0.84, 0) forwards;
+        }
+
+        @keyframes slideInUp {
+            from { transform: translateY(100vh); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes slideOutUp {
+            from { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(-100vh); opacity: 0; }
+        }
+
+        .navigation {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.9);
+            z-index: 100;
+            position: relative;
+            height: 5rem;
+        }
+
+        .logo {
+            width: 5rem;
+            height: 5rem;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: center;
+            position: absolute;
+            left: 5%;
+            top: 0;
+        }
+
+        .list {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            list-style-type: none;
+            font-size: 1em;
+            font-weight: 500;
+        }
+        
+        .socials {
+            font-size: 0.75em;
+            display: inline-flex;
+            flex-direction: row;
+            position: absolute;
+            right: 5%;
+            top: 2rem;
+            color: rgb(15, 0, 70);
+            list-style: none;
+            gap: 1rem;
+        }
+
+        a {
+            color: rgb(15, 0, 70);
+            text-decoration: none;
+            position: relative;
+        }
+
+        a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -1px;
+            width: 0;
+            height: 2px;
+            background-color: rgb(129, 127, 250);
+            transition: width 0.3s ease-in-out;
+        }
+
+        a:hover::after {
+            width: 100%;
+        }
+
+        .cataloq {
+            background: linear-gradient(90deg, #ff8a00, #e52e71, #ff8a00);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: shimmer 3s linear infinite;
+        }
+
+        @keyframes shimmer {
+            to { background-position: 200% center; }
+        }
+
+        .hero {
+            display: flex;
+            background-color: #ffffff;
+            height: 85vh;
+        }
+
+        .hero_container {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            height: 85vh;
+            width: 50%;
+            position: relative;
+            padding: 0 5rem;
+            text-align: center;
+            background-image: url(images/Free\ Bus\ Stop\ Poster\ at\ Night\ Mockup.jpg);
+            background-position: center;
+            background-size: cover;
+        }
+
+        .hero_container p {
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 2px solid white;
+            animation: typing 3.5s steps(40, end) forwards, blink 0.8s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 40ch; }
+        }
+
+        @keyframes blink {
+            from, to { border-color: transparent; }
+            50% { border-color: rgb(255, 255, 255); }
+        }
+
+        h1 {
+            font-family: Lora, serif;
+            font-style: italic;
+            font-weight: bolder;
+            color: #ffffff;
+        }
+
+        .category-wrapper {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 0.1rem;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-up {
+            opacity: 0;
+            animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+        .delay-6 { animation-delay: 0.6s; }
+        .delay-7 { animation-delay: 0.7s; }
+
+        .category-btn {
+            color: rgb(255, 255, 255);
+            background-color: rgba(0, 0, 0, 0.692);
+            border-radius: 0;
+            padding: 20px 25px;
+            width: 100%;
+            font-weight: 500;
+            border: solid 1px rgba(255, 255, 255, 0.281);
+            font-size: 1rem;
+            text-align: left;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            
+        }
+
+        .category-btn:hover {
+            color: rgb(48, 48, 48);
+            background-color: rgba(255, 255, 255, 0.877);
+            transform: scale(1.025);
+            z-index: 10;
+        }
+
+        .video_container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #fcfafa;
+            height: 85vh;
+            width: 50%;
+            padding: 0 5rem;
+            margin: auto;
+        }
+
+        .hero_video {
+            width: 100%; 
+            border-radius: 25px;  
+            border: solid 2px white;
+            transition: border 0.2s ease;
+        }
+
+        .hero_video:hover {
+            border: solid 2px rgba(0, 0, 0, 0.884);
+        }
+
+        .explore_button {
+            color: #000000;
+            border-radius: 25px;
+            padding: 20px 25px;
+            width: 250px;
+            font-size: 1.25rem;
+            font-weight: 400;
+            border: solid 2px #000;
+            position: relative;
+            overflow: hidden;
+            background: transparent;
+            cursor: pointer;
+        }
+
+        .explore_button::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgb(65, 62, 201);
+            z-index: -1;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease-out;
+        }
+
+        .explore_button:hover::before {
+            transform: scaleX(1);
+        }
+
+        .explore_button:hover {
+            color: #ffffff;
+            border: solid 2px white;
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
+            transform: scale(1.05);
+            transition: all 0.2s ease-in;
+        }
+
+        .footer {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            height: 2vh;
+            margin-top: 1.25rem;
+            padding: 0 5rem;
+        }
+
+        .footer_list {
+            display: inline-flex;
+            gap: 2rem;
+            list-style: none;
+            font-size: 1em;
+            font-weight: 400;
+        }
+
+        .work_button {
+            color: #ffffff;
+            background-color: rgb(0, 0, 0);
+            border-radius: 25px;
+            padding: 10px;
+            width: 150px;
+            border: transparent 1px;
+            cursor: pointer;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .work_button:hover {
+            transform: scale(1.1);
+            background-color: rgb(65, 62, 201); 
+        }
+
+        .contact_info {
+            width: 100%;
+            height: 5rem;
+            background-color: rgba(0, 0, 0, 0.85);
+            position: absolute;
+            top: 5rem;
+            z-index: 10;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+        }
+
+        body:has(.list_portfolio:hover) .contact_info {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .category_info {
+            background-color: #ffffff;
+            width: 50%;
+            position: absolute;
+            right: 0;
+            height: 85vh;
+            top: 5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+
+        body:has(.category_1:hover) .show_category_info_1,
+        body:has(.category_2:hover) .show_category_info_2,
+        body:has(.category_3:hover) .show_category_info_3,
+        body:has(.category_4:hover) .show_category_info_4,
+        body:has(.category_5:hover) .show_category_info_5,
+        body:has(.category_6:hover) .show_category_info_6,
+        body:has(.category_7:hover) .show_category_info_7 {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .info_image {
+            background-color: #ffffff;
+            border-radius: 25px;
+            width: 500px;
+            height: auto;
+            margin: 0 5rem 5rem 5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .info_image_1 {
+            object-fit: cover;
+            width: 100%;
+            max-height: 700px;
+            border-radius: 25px;
+        }
+
+        h2 {
+            font-family: Lora, serif;
+            font-style: italic;
+            text-align: center;
+            margin-top: 5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="navigation">
+        <div>
+            <img class="logo" src="images/ramsify_logo_main.png" alt="logo">
+        </div>
+        <div>
+            <nav>
+                <ul class="list">
+                    <li><a href="index.html" class="transition-link">Home</a></li>
+                    <li><a href="portfolio.html" class="transition-link">Portfolio</a></li>
+                    <li><a href="#about">About Designer</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div>
+            <ul class="socials">
+                <li><a href="#linkedin">LinkedIn</a></li>
+                <li><a href="#behance">Behance</a></li>
+                <li><a href="#mail">Mail</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="hero">
+        <div class="hero_container">
+            <h1>Selected Projects</h1>
+            <br>
+            <p>Browse <em><strong>Selected</strong></em> works from the following Categories.</p>
+            <br>
+            <div class="category-wrapper">
+                <button class="category-btn category_1 animate-fade-up delay-1">Advertising</button>
+                <button class="category-btn category_2 animate-fade-up delay-2">Branding & Visual Identity</button>
+                <button class="category-btn category_3 animate-fade-up delay-3">Illustration</button>
+                <button class="category-btn category_4 animate-fade-up delay-4">Motion & Animation</button>
+                <button class="category-btn category_5 animate-fade-up delay-5">Packaging</button>
+                <button class="category-btn category_6 animate-fade-up delay-6">Editorial</button>
+                <button class="category-btn category_7 animate-fade-up delay-7">UI/UX</button>
+            </div>
+        </div>
+
+        <div class="video_container">
+            <video class="hero_video" src="vid/terravibe_ad.mp4" muted playsinline autoplay loop></video>
+            <br><br><br>
+            <button class="explore_button">Explore TerraVibe</button>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div>
+            <button class="work_button">Hire My Skills</button>
+        </div>
+        <div>
+            <ul class="footer_list">
+                <li><a href="selected_works.html" class="transition-link">Selected Works</a></li>
+                <li><a class="catalog" href="catalog.html">Catalog</a></li>
+                <li><a class="list_portfolio" href="#contact">Get In Touch</a></li>
+            </ul>
+        </div>
+        <div class="copy_right">
+            <p style="font-size: 0.8rem;">&copy; 2026 Ramsey Asiedu</p>
+        </div>
+    </div>
+
+    <div class="contact_info"></div>
+
+    <div class="category_info show_category_info_1">
+        <h2>Advertising</h2><br>    
+        <div class="info_image"><img class="info_image_1" src="images/Advertising/" alt=""></div> 
+    </div>
+    <div class="category_info show_category_info_2">
+        <h2>Branding & Visual Identity</h2><br>    
+        <div class="info_image"><img class="info_image_1" src="images/Branding & Identity/" alt=""></div> 
+    </div>
+    <div class="category_info show_category_info_3">
+        <h2>Illustration</h2><br>    
+        <div class="info_image"><img class="info_image_1" src="images/Illustration/" alt=""></div> 
+    </div>
+    <div class="category_info show_category_info_4">
+        <h2>Motion & Animation</h2><br>    
+        <div class="info_image"><video controls autoplay loop class="info_image_1" src="images/Motion & Animation/"></video></div> 
+    </div>
+    <div class="category_info show_category_info_5">
+        <h2>Packaging</h2><br>    
+        <div class="info_image"><img class="info_image_1" src="images/Packaging/" alt=""></div> 
+    </div>
+    <div class="category_info show_category_info_6">
+        <h2>Editorial</h2><br>    
+        <div class="info_image"><img class="info_image_1" src="images/Print & Editorial/" alt=""></div> 
+    </div>
+    <div class="category_info show_category_info_7">
+        <h2>UI/UX</h2><br>    
+        <div class="info_image"><video autoplay controls loop style="width: 300px;" class="info_image_1" src="images/UIUX/"></video></div> 
+    </div>
+
+    <script>
+
+        // Check if the current visit is a page refresh
+        const navType = performance.getEntriesByType("navigation")[0]?.type;
+        if (navType === "reload") {
+            // Instantly kill the animation before the page even renders
+            document.body.style.animation = "none";
+        }
+
+
+        document.querySelectorAll('.transition-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault(); 
+                const targetUrl = this.href;
+                document.body.classList.add('slide-out-up');
+                setTimeout(() => {
+                    window.location.href = targetUrl;
+                }, 500); 
+            });
+        });
+    </script>
+</body>
+</html>

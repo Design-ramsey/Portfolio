@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selected Works - Horizontal</title>
+    <style>
+        * {
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background-color: grey;
+            height: 100vh;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            overflow-x: scroll;
+            overflow-y: hidden;
+            scroll-snap-type: x mandatory; 
+            scroll-behavior: smooth;
+        }
+
+        .section {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex: 0 0 100vw;
+            scroll-snap-align: start;
+            background-attachment: fixed;
+        }
+
+        .object_1 { background-color: rgb(240, 240, 240); }
+        .object_2 { background-color: rgb(226, 226, 226); }
+        .object_3 { background-color: rgb(200, 200, 200); }
+
+        .transition-content {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.8s ease-out;
+        }
+
+        .transition-content.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Optional: Hide the scrollbar for a cleaner look */
+        .container::-webkit-scrollbar {
+            display: none;
+        }
+        .container {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+    </style>
+</head>
+<body>
+    <main class="container">
+        <section class="section object_1">
+            <div class="transition-content"><h1>Work 1</h1></div>
+        </section>
+        <section class="section object_2">
+            <div class="transition-content"><h1>Work 2</h1></div>
+        </section>
+        <section class="section object_3">
+            <div class="transition-content"><h1>Work 3</h1></div>
+        </section>
+    </main>
+
+    <script>
+        // 1. Existing Intersection Observer for animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                } else {
+                    entry.target.classList.remove('visible');
+                }
+            });
+        }, { threshold: 0.5 }); 
+
+        document.querySelectorAll('.transition-content').forEach(element => {
+            observer.observe(element);
+        });
+
+        // 2. NEW: Mouse wheel to horizontal scroll logic
+        const container = document.querySelector('.container');
+
+        container.addEventListener('wheel', (evt) => {
+            // Prevent the default vertical scrolling
+            evt.preventDefault();
+            // Scroll horizontally by the vertical delta amount
+            container.scrollLeft += evt.deltaY;
+        });
+    </script>
+</body>
+</html>
