@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Designer — Asiedu Ramsey Kwesi</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            scrollbar-width: none;
+            font-family: 'Google sans', sans-serif;
+            box-sizing: border-box;
+            
+        }
+
+        /* Lenis smooth scrolling */
+        html.lenis,
+        html.lenis body { height: auto; }
+        html.lenis.lenis-smooth { scroll-behavior: auto !important; }
+        html.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+        html.lenis.lenis-stopped { overflow: hidden; }
+        html.lenis.lenis-smooth iframe { pointer-events: none; }
+        
+        @media (prefers-reduced-motion: reduce) {
+            html.lenis,
+            html.lenis body { scroll-behavior: auto !important; }
+        }
+
+        body {
+            background-color: #ffffff;
+            color: #000;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* ---- Navigation ---- */
+        .navigation {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            height: 2rem;
+            padding: 1.25rem 5rem;
+            margin: 0;
+            width: 100%;
+            z-index: 100;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(15px);
+        }
+
+        .list {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            list-style-type: none;
+            font-size: 1em;
+            font-weight: 500;
+        }
+
+        .socials {
+            font-size: 0.75em;
+            display: inline-flex;
+            flex-direction: row;
+            list-style: none;
+            gap: 1rem;
+        }
+
+        a, h3, .socials {
+            color: #000;
+            text-decoration: none;
+            position: relative;
+            transition: color 0.5s ease;
+        }
+
+        a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -1px;
+            width: 0;
+            height: 2px;
+            background-color: rgb(39, 39, 39);
+            transition: width 0.3s ease-in-out, background-color 0.5s ease;
+        }
+
+        a:hover::after { width: 100%; }
+
+        /* ---- Footer ---- */
+        .footer {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            height: 2.5rem;
+            position: fixed;
+            padding: 1rem 5rem;
+            right: 0;
+            bottom: 0;
+            z-index: 100;
+            pointer-events: none;
+            background-color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(15px);
+        }
+
+        .footer>* { pointer-events: auto; }
+
+        .footer_list {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: row;
+            gap: 2rem;
+            list-style: none;
+            font-size: 1em;
+            font-weight: 400;
+        }
+
+        .work_button {
+            color: #fff;
+            background-color: #000;
+            border-radius: 25px;
+            padding: 10px;
+            width: 150px;
+            border: transparent 1px;
+            cursor: pointer;
+            transition: transform 0.3s ease, background-color 0.5s ease, color 0.5s ease;
+            font-weight: bold;
+        }
+
+        .work_button:hover {
+            transform: scale(1.01);
+            background-color: rgb(65, 62, 201);
+            color: #fff;
+        }
+
+        /* ---- About Page Grid Layout & Typography ---- */
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            column-gap: 2rem;
+            row-gap: 8rem;
+            margin: 14rem 5rem 12rem 5rem;
+        }
+
+        /* Landing/Hero Section */
+        .hero-text {
+            grid-column: 1 / 8;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .hero-title {
+            font-size: 5vw;
+            line-height: 1.05;
+            font-weight: 400;
+            text-transform: uppercase;
+            margin: 0;
+            letter-spacing: -0.02em;
+            text-align: left;
+            min-height: 16vw; /* Prevents layout shift during typewriter */
+        }
+        
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 5vw;
+            background-color: #000;
+            vertical-align: bottom;
+            animation: blink 1s step-end infinite;
+            margin-left: 5px;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .hero-image {
+            grid-column: 8 / 13;
+            background-color: #e0e0e0;
+            width: 100%;
+            height: 100%;
+            aspect-ratio: 3 / 4;
+            transform: scale(0.98);
+            opacity: 0;
+            animation: fadeUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.5s;
+        }
+
+            .hero-image img {
+                height: 100%;
+                width: 100%;
+                object-fit: cover;
+            }
+
+        @keyframes fadeUp {
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        /* Content Sections */
+        .title-col {
+            grid-column: 1 / 4;
+            border-top: 1px solid #000;
+            padding-top: 1.5rem;
+        }
+
+        .title-col h2 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            font-weight: 500;
+            margin: 0;
+            letter-spacing: 0.05em;
+            cursor: crosshair;
+            display: inline-block;
+        }
+
+        .content-col {
+            grid-column: 5 / 11;
+            border-top: 1px solid #000;
+            padding-top: 1.5rem;
+            transition: color 0.4s ease;
+        }
+
+        /* Reading Focus Hover Effect */
+        .content-col:hover p, 
+        .content-col:hover .list-subheader {
+            color: #a0a0a0; /* Dims all text slightly when hovering inside the block */
+        }
+
+        .content-col p {
+            font-family: 'Lora', serif;
+            text-align: justify; 
+            font-size: 1rem;
+            line-height: 2;
+            margin-top: 0;
+            margin-bottom: 2.5rem;
+            color: #222;
+            transition: color 0.4s ease, transform 0.4s ease;
+        }
+
+        .content-col p:hover {
+            color: #000 !important; /* Highlights the specific paragraph being hovered */
+        }
+
+        .list-item {
+            margin-bottom: 4rem;
+        }
+        .list-item:last-child { margin-bottom: 0; }
+
+        .list-header {
+            font-family: 'Google sans', sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            color: #000; /* Prevent dimming on header */
+        }
+        
+        .list-header span.date {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .list-subheader {
+            font-style: italic;
+            color: #444;
+            margin-bottom: 1.5rem;
+            font-family: 'Lora', serif;
+            font-size: 1.25rem;
+            line-height: 2;
+            transition: color 0.4s ease;
+        }
+        
+        .list-item:hover .list-subheader {
+            color: #000 !important;
+        }
+
+        /* Scroll Interactive Effects */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .scroll-reveal.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ---- Responsive Breakpoints ---- */
+        @media (max-width: 1200px) {
+            .navigation, .footer { padding: 1rem 2rem; }
+            .about-grid { margin: 12rem 2rem 10rem 2rem; }
+            .content-col { grid-column: 5 / 12; }
+        }
+
+        @media (max-width: 900px) {
+            .hero-text { grid-column: 1 / 13; margin-bottom: 2rem; }
+            .hero-title { font-size: 8vw; min-height: 26vw; }
+            .cursor { height: 8vw; }
+            .hero-image { grid-column: 1 / 13; aspect-ratio: 16 / 9; }
+            .title-col { grid-column: 1 / 13; border-top: none; padding-top: 0; margin-bottom: -6rem; }
+            .content-col { grid-column: 1 / 13; }
+            .list-header { flex-direction: column; gap: 0.25rem; }
+        }
+
+        @media (max-width: 768px) {
+            * { padding: 0; margin: 0.25rem 0rem 0rem 0rem; }
+            .navigation { padding: 0.25rem 1rem; height: auto; flex-wrap: wrap; gap: 1rem; }
+            .navigation .list { gap: 2rem; font-size: 0.85em; }
+            .navigation .socials { display: none; }
+            .footer { padding: 0rem 0rem 0.25rem 0rem; margin-bottom: 0rem; height: auto; width: 100%; flex-wrap: nowrap; gap: 2rem; justify-content: center; align-items: center; display: flex; flex-direction: row; }
+            .footer_list { gap: 1rem; font-size: 0.8em; }
+            .work_button { width: 90px; padding: 6px 10px; font-size: 0.8em; border-radius: 20px; }
+            .about-grid { margin: 8rem 1rem 8rem 1rem; row-gap: 6rem; }
+            .hero-title { font-size: 11vw; min-height: 35vw; }
+            .hero-image { height: 500px;}
+            .cursor { height: 11vw; }
+            .content-col p, .list-subheader { font-size: 0.9rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <div class="navigation">
+        <div>
+            <p><strong> 2024 - Present </strong></p>
+        </div>
+        <nav>
+            <ul class="list">
+                <li><a href="index.html" class="transition-link">Home</a></li>
+                <li><a href="portfolio.html" class="transition-link">Portfolio</a></li>
+                <li><a href="#about">About Designer</a></li>
+            </ul>
+        </nav>
+        <div>
+            <ul class="socials">
+                <li><a href="#linkedin">LinkedIn</a></li>
+                <li><a href="#behance">Behance</a></li>
+                <li><a href="#mail">Mail</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- About Content using Grid -->
+    <div class="about-grid">
+        <!-- Landing Section -->
+        <div class="hero-text">
+            <h1 class="hero-title">
+                <span id="type-line-1"></span><br>
+                <span id="type-line-2"></span><br>
+                <span id="type-line-3"></span><span class="cursor"></span>
+            </h1>
+        </div>
+        <div class="hero-image">
+            <img src="images/ARK_1.png">
+            <!-- Grey placeholder for your image -->
+        </div>
+
+        <!-- Details Section -->
+        <div class="title-col">
+            <h2 class="scramble-hover" data-value="Biography">Biography</h2>
+        </div>
+        <div class="content-col">
+            <p class="scroll-reveal">I am a multidisciplinary Graphic Designer specializing in brand identity, UI/UX design, and technical print production. Operating at the intersection of digital environments and physical media, my process ensures that every concept translates seamlessly from screen to real-world application.</p>
+            <p class="scroll-reveal" style="transition-delay: 0.1s;">From crafting intuitive web interfaces in Figma to configuring precise packaging dielines and executing large-format print runs, I manage design lifecycles end-to-end. Currently, I balance my BTech in Graphic Design at Takoradi Technical University with an active freelance practice, continuously exploring new visual narratives.</p>
+        </div>
+
+        <div class="title-col">
+            <h2 class="scramble-hover" data-value="Experience">Experience</h2>
+        </div>
+        <div class="content-col">
+            <div class="list-item scroll-reveal">
+                <div class="list-header scramble-target">
+                    <span class="scramble-text" data-value="Freelance Graphic Designer & UI Specialist">Freelance Graphic Designer & UI Specialist</span>
+                    <span class="date">Jan 2024 — Present</span>
+                </div>
+                <div class="list-subheader">Independent Practice</div>
+                <p>Developing brand identities, digital assets, and user interfaces tailored to client specifications. Managing end-to-end design lifecycles for a diverse roster of clients across multiple industries.</p>
+            </div>
+
+            <div class="list-item scroll-reveal">
+                <div class="list-header scramble-target">
+                    <span class="scramble-text" data-value="Graphic Designer">Graphic Designer</span>
+                    <span class="date">Mar 2026 — Present</span>
+                </div>
+                <div class="list-subheader">GRASU, Takoradi Technical University</div>
+                <p>Serving as one of the official Graphic Designers for the 2025/2026 academic year, contributing creative and technical design work to the union's executive body.</p>
+            </div>
+
+            <div class="list-item scroll-reveal">
+                <div class="list-header scramble-target">
+                    <span class="scramble-text" data-value="Graphic Designer & Production">Graphic Designer & Production</span>
+                    <span class="date">Aug 2024 — Oct 8, 2024 & Aug 2025 — Oct 2025</span>
+                </div>
+                <div class="list-subheader">Vikipat Media Solutions</div>
+                <p>Designed corporate brand identities and FMCG packaging labels. Executed DTF garment printing and large-format environmental signage output, streamlining pre-press operations under the supervision of Mesah.</p>
+            </div>
+        </div>
+
+        <div class="title-col">
+            <h2 class="scramble-hover" data-value="Capabilities">Capabilities</h2>
+        </div>
+        <div class="content-col">
+            <p class="scroll-reveal"><strong>Digital & Brand:</strong> UI/UX Design, Corporate Identity, Logo Design, Visual Storytelling, Social Media Graphics.</p>
+            <p class="scroll-reveal" style="transition-delay: 0.1s;"><strong>Print & Production:</strong> Packaging Dielines, DTF Garment Printing, Large-Format & RIP Output, CMYK Pre-press, Bleeds & Safe Zones.</p>
+            <p class="scroll-reveal" style="transition-delay: 0.2s;"><strong>Toolkit:</strong> Adobe Creative Suite (Photoshop, Illustrator, InDesign, After Effects), Figma, CorelDRAW, Affinity.</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div>
+            <button class="work_button">Contract?</button>
+        </div>
+        <div>
+            <ul class="footer_list">
+                <li><a href="selected_works.html" class="transition-link">Selected Works</a></li>
+                <li><a class="cataloq" href="#catalog">Catalog</a></li>
+                <li><a href="#overview" class="list_portfolio">Get In Touch</a></li>
+            </ul>
+        </div>
+        <div class="copy_right">
+            <p style="font-size: 0.8rem; font-family: 'Google sans', sans-serif;">&copy; 2026 Ramsey Asiedu</p>
+        </div>
+    </div>
+
+    <!-- Lenis smooth scrolling -->
+    <script src="https://unpkg.com/lenis@1.3.25/dist/lenis.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            
+            // Initialize Lenis
+            const lenis = new Lenis({
+                autoRaf: !prefersReducedMotion,
+                anchors: true,
+                smoothWheel: true,
+                syncTouch: false
+            });
+            window.lenis = lenis;
+            if (prefersReducedMotion) lenis.stop();
+
+            // 1. Typewriter Effect
+            if (!prefersReducedMotion) {
+                const lines = ["ASIEDU RAMSEY KWESI", "GRAPHIC DESIGNER", "C.2026"];
+                const speeds = { char: 40, lineDelay: 300 }; // Very fast for a professional feel
+                
+                let lineIndex = 0;
+                let charIndex = 0;
+
+                function typeWriter() {
+                    if (lineIndex < lines.length) {
+                        if (charIndex < lines[lineIndex].length) {
+                            document.getElementById(`type-line-${lineIndex + 1}`).innerHTML += lines[lineIndex].charAt(charIndex);
+                            charIndex++;
+                            setTimeout(typeWriter, speeds.char);
+                        } else {
+                            lineIndex++;
+                            charIndex = 0;
+                            setTimeout(typeWriter, speeds.lineDelay);
+                        }
+                    }
+                }
+                setTimeout(typeWriter, 200); // Initial delay
+            } else {
+                // Fallback for reduced motion
+                document.getElementById('type-line-1').innerHTML = "ASIEDU RAMSEY KWESI";
+                document.getElementById('type-line-2').innerHTML = "GRAPHIC DESIGNER";
+                document.getElementById('type-line-3').innerHTML = "C.2026";
+            }
+
+            // 2. Scroll-Reveal Observer
+            if ('IntersectionObserver' in window && !prefersReducedMotion) {
+                const scrollObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('in-view');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { 
+                    root: null, 
+                    threshold: 0.15,
+                    rootMargin: "0px 0px -50px 0px"
+                });
+
+                document.querySelectorAll('.scroll-reveal').forEach(el => {
+                    scrollObserver.observe(el);
+                });
+            } else {
+                document.querySelectorAll('.scroll-reveal').forEach(el => el.classList.add('in-view'));
+            }
+
+            // 3. Text Scramble Interactive Hover Effect
+            const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            
+            const scrambleElements = document.querySelectorAll('.scramble-hover, .scramble-text');
+            
+            scrambleElements.forEach(el => {
+                el.addEventListener('mouseover', event => {
+                    if(prefersReducedMotion) return;
+                    
+                    let iterations = 0;
+                    const originalText = event.target.dataset.value;
+                    
+                    clearInterval(el.interval);
+                    
+                    el.interval = setInterval(() => {
+                        event.target.innerText = originalText.split("")
+                            .map((letter, index) => {
+                                if(index < iterations || letter === " ") {
+                                    return originalText[index];
+                                }
+                                return letters[Math.floor(Math.random() * 26)];
+                            })
+                            .join("");
+                        
+                        // Increase iteration smoothly
+                        if(iterations >= originalText.length) {
+                            clearInterval(el.interval);
+                        }
+                        iterations += 1 / 2; // Speed of deciphering
+                    }, 30);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
