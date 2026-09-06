@@ -14,39 +14,821 @@ h1,h2,h3,p,a,li,button{color:var(--text-color)}h1{font-weight:1000;font-size:cla
 .container{height:100vh;width:100%;overflow-y:auto;overflow-x:hidden;position:relative;scroll-snap-type:y mandatory;scroll-behavior:smooth;background:var(--section-bg);transition:background-color .6s}
 .section{display:flex;justify-content:center;align-items:center;text-align:center;height:100vh;width:100%;scroll-snap-align:start;position:relative;overflow:hidden;isolation:isolate;background:var(--section-bg);color:var(--text-color);transition:background-color .6s,color .45s}.section:before{content:'';position:absolute;inset:0;background:color-mix(in srgb,var(--section-bg) 18%,transparent);opacity:.38;z-index:-1}
 .transition-content{width:min(1000px,88vw);height:min(700px,72vh);position:relative;display:flex;align-items:center;justify-content:center;opacity:1;transform:translateY(40px) scale(.93);filter:saturate(.78) brightness(.58);transition:transform .78s cubic-bezier(.16,1,.3,1),filter .78s cubic-bezier(.16,1,.3,1);will-change:transform,filter}.transition-content.visible{opacity:1;transform:none;filter:saturate(1) brightness(1)}
-.content{width:100%;height:100%;max-width:1200px;max-height:700px; position:absolute;inset:50% auto auto 50%;z-index:-1;transform:translate(-50%,-50%);overflow:hidden;border-radius:2px;}.content:after{content:'';position:absolute;inset:0;pointer-events:none}.content img{display:block;width:100%;height:100%;object-fit:contain;transition:transform 1s cubic-bezier(.16,1,.3,1),filter .8s}.transition-content.visible .content img{transform:scale(1.025)}
+.content{width:100%;height:100%;max-width:1200px;max-height:700px;position:absolute;inset:50% auto auto 50%;z-index:0;transform:translate(-50%,-50%);overflow:hidden;border-radius:2px;}.content:after{content:'';position:absolute;inset:0;pointer-events:none}.content img{display:block;width:100%;height:100%;object-fit:contain;transition:transform 1s cubic-bezier(.16,1,.3,1),filter .8s}.transition-content.visible .content img{transform:scale(1.025)}
 a{color:var(--link-color);text-decoration:none;position:relative;transition:color .35s,opacity .3s}a:after{content:'';position:absolute;left:0;bottom:-1px;width:0;height:2px;border-radius:999px;background:var(--accent-color);transition:width .3s,background-color .35s}a:hover:after,a:focus-visible:after{width:100%}a:hover,a:focus-visible{opacity:.8}
 .h1-char{display:inline-block;opacity:0;transform:translate3d(var(--sx),var(--sy),0) rotate(var(--sr)) scale(.65);filter:blur(6px);will-change:transform,opacity,filter}.transition-content.visible .h1-char{animation:assembleChar .6s cubic-bezier(.16,1,.3,1) forwards;animation-delay:var(--delay)}@keyframes assembleChar{0%{opacity:0;transform:translate3d(var(--sx),var(--sy),0) rotate(var(--sr)) scale(.65);filter:blur(6px)}55%{opacity:1}100%{opacity:1;transform:translate3d(0,0,0) rotate(0) scale(1);filter:blur(0)}}@keyframes disappearH1{0%{opacity:1;transform:translate3d(0,0,0) rotate(0) scale(1);filter:blur(0)}100%{opacity:0;transform:translate3d(0,-18px,0) scale(.96);filter:blur(4px)}}.transition-content:not(.visible) .h1-char{opacity:0;transform:translate3d(var(--ex),var(--ey),0) rotate(var(--er)) scale(.7);filter:blur(5px);transition:opacity .22s,transform .28s,filter .25s}.transition-content.visible h1{animation:disappearH1 .01s linear .6s forwards}
 .catalog{color:transparent;-webkit-background-clip:text;background-clip:text;background-image:linear-gradient(90deg,var(--catalog-a,#ff8a00),var(--catalog-b,#e52e71),var(--catalog-a,#ff8a00));background-size:200% auto;animation:shimmer 3s linear infinite;filter:drop-shadow(0 1px 2px rgba(0,0,0,.24))}.catalog:after{background:linear-gradient(90deg,var(--catalog-a,#ff8a00),var(--catalog-b,#e52e71))}@keyframes shimmer{to{background-position:200% center}}
 .footer{display:flex;justify-content:space-between;align-items:center;width:100%;position:fixed;padding:1rem 5rem;left:0;bottom:0;z-index:100;pointer-events:none}.footer>*{pointer-events:auto}.footer_list{display:flex;justify-content:center;align-items:center;gap:2rem;list-style:none;font-size:1em;font-weight:400}.work_button{color:var(--accent-contrast);background:var(--accent-color);border-radius:25px;padding:10px 18px;min-width:150px;border:1px solid rgba(var(--accent-rgb),.2);cursor:pointer;transition:transform .3s,background-color .35s,color .35s}.work_button:hover,.work_button:focus-visible{transform:scale(1.08);background:var(--text-color);color:var(--section-bg)}.copy_right p{color:var(--muted-color);text-shadow:0 1px 2px rgba(0,0,0,.22)}
 .contact_info{width:100%;height:5rem;background:rgba(0,0,0,.85);position:fixed;top:5rem;left:0;z-index:90;opacity:0;visibility:hidden;transition:opacity .3s}body:has(.list_portfolio:hover) .contact_info{opacity:1;visibility:visible}.section-index{position:absolute;top:50%;right:1.5rem;transform:translateY(-50%);z-index:5;font-size:.68rem;font-weight:600;letter-spacing:.14em;opacity:.72}
+
+/* Horizontal object galleries */
+.horizontal-gallery{
+  position:absolute;
+  inset:0;
+  overflow-x:auto;
+  overflow-y:hidden;
+  display:flex;
+  scroll-snap-type:x mandatory;
+  scroll-behavior:smooth;
+  overscroll-behavior-x:contain;
+  overscroll-behavior-y:none;
+  scrollbar-width:none;
+  touch-action:pan-x pan-y;
+  -webkit-overflow-scrolling:touch;
+  cursor:grab;
+  z-index:0;
+}
+.horizontal-gallery:active{cursor:grabbing}
+.horizontal-gallery::-webkit-scrollbar{display:none}
+.gallery-track{display:flex;height:100%;min-width:max-content}
+.gallery-slide{
+  position:relative;
+  flex:0 0 100%;
+  width:100%;
+  height:100%;
+  scroll-snap-align:center;
+  scroll-snap-stop:always;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  isolation:isolate;
+}
+.gallery-slide::before{
+  content:'';
+  position:absolute;
+  inset:-7%;
+  z-index:-2;
+  
+  transform:scale(1.12);
+}
+.gallery-slide .slide-image{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  object-position:center;
+  transform:scale(var(--slide-scale,1.075)) translate3d(var(--px,0px),var(--py,0px),0);
+  opacity:var(--slide-opacity,1);
+  filter:saturate(.88) brightness(.72);
+  will-change:transform,filter;
+  user-select:none;
+  pointer-events:none;
+}
+
+.gallery-slide .slide-label{
+  position:absolute;
+  left:clamp(1rem,4vw,4rem);
+  bottom:clamp(1rem,4vw,4rem);
+  z-index:4;
+  font-size:.68rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  padding:.55rem .8rem;
+  border:1px solid color-mix(in srgb,var(--text-color) 35%,transparent);
+  border-radius:999px;
+  background:color-mix(in srgb,var(--section-bg) 36%,transparent);
+  backdrop-filter:blur(10px);
+}
+.gallery-ui{
+  position:absolute;
+  left:50%;
+  bottom:clamp(4.2rem,9vh,6rem);
+  transform:translateX(-50%);
+  z-index:8;
+  display:flex;
+  align-items:center;
+  gap:.75rem;
+  padding:.55rem .75rem;
+  border-radius:999px;
+  background:rgba(0,0,0,.18);
+  backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,.13);
+}
+.gallery-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  border:0;
+  padding:0;
+  background:currentColor;
+  opacity:.28;
+  cursor:pointer;
+  transition:transform .35s cubic-bezier(.16,1,.3,1),opacity .35s;
+}
+.gallery-dot.active{opacity:1;transform:scale(1.55)}
+.gallery-hint{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  z-index:8;
+  pointer-events:none;
+  opacity:.78;
+  font-size:.65rem;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  white-space:nowrap;
+  animation:galleryHint 2.4s ease-in-out infinite;
+}
+@keyframes galleryHint{
+  0%,100%{opacity:.15;transform:translate(-50%,-50%) translateX(0)}
+  45%{opacity:.8;transform:translate(-50%,-50%) translateX(10px)}
+}
+.gallery-slide:first-child .gallery-hint{display:block}
+.gallery-slide:not(:first-child) .gallery-hint{display:none}
+.horizontal-gallery.ready .gallery-slide .slide-image{transition:filter .7s cubic-bezier(.16,1,.3,1)}
+.horizontal-gallery.ready .gallery-slide.is-active .slide-image{filter:saturate(1) brightness(1)}
+@media(max-width:900px){
+  .gallery-ui{bottom:5.4rem;gap:.55rem}
+  .gallery-dot{width:6px;height:6px}
+  .gallery-slide .slide-image{transform:scale(1.12) translate3d(var(--px,0px),var(--py,0px),0)}
+}
+
 @media(max-width:900px){.navigation{padding:0 1.25rem}.list{gap:1rem;font-size:.85rem}.socials{display:none}.footer{padding:1rem 1.25rem;gap:.8rem}.footer_list{gap:.8rem;font-size:.82rem}.copy_right{display:none}.transition-content{width:94vw;height:68vh}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.001ms!important}}
 </style>
 </head>
 <body>
-<div class="navigation"><div><h3 id="workNoTop">WORK_NO:1</h3></div><nav><ul class="list"><li><a href="index.html" class="transition-link">Home</a></li><li><a href="portfolio.html" class="transition-link">Portfolio</a></li><li><a href="#about">About Designer</a></li></ul></nav><div><ul class="socials"><li><a href="#linkedin">LinkedIn</a></li><li><a href="#behance">Behance</a></li><li><a href="#mail">Mail</a></li></ul></div></div>
-<main class="container" id="portfolioScroller">
-<section class="section object_1" data-work="1"><div class="transition-content"><h1 data-assemble="WORK_NO:1">WORK_NO:1</h1><div class="content"><img src="images/Branding & Identity/TerraVibe/DL_Flyer_with_the_Keyboard.jpg" alt="IMG_1></div></div><div class="section-index" aria-hidden="true">01 / 06</div></section>
-<section class="section object_2" data-work="2"><div class="transition-content"><h1 data-assemble="WORK_NO:2">WORK_NO:2</h1><div class="content"><img src="images/Branding & Identity/TerraVibe/backpack_linen_og.jpg" alt="IMG_2"></div></div><div class="section-index" aria-hidden="true">02 / 06</div></section>
-<section class="section object_3" data-work="3"><div class="transition-content"><h1 data-assemble="WORK_NO:3">WORK_NO:3</h1><div class="content"><img src="images/Branding & Identity/TerraVibe/road_bike_1_1.jpg" alt="IMG_3"></div></div><div class="section-index" aria-hidden="true">03 / 06</div></section>
-<section class="section object_4" data-work="4"><div class="transition-content"><h1 data-assemble="WORK_NO:4">WORK_NO:4</h1><div class="content"><img src="images/Branding & Identity/TerraVibe/skateboard_f&b.jpg" alt="IMG_4"></div></div><div class="section-index" aria-hidden="true">04 / 06</div></section>
-<section class="section object_5" data-work="5"><div class="transition-content"><h1 data-assemble="WORK_NO:5">WORK_NO:5</h1><div class="content"><img src="images/Branding & Identity/TerraVibe/chopsticks_mockup_4.jpg" alt="IMG_5"></div></div><div class="section-index" aria-hidden="true">05 / 06</div></section>
-<section class="section object_6" data-work="6"><div class="transition-content"><h1 data-assemble="WORK_NO:6">WORK_NO:6</h1><div class="content"><img src="images/Branding & Identity/TerraVibe/women's_shirt_front.jpg" alt="IMG_6"></div></div><div class="section-index" aria-hidden="true">06 / 06</div></section>
+<div class="navigation"><div><h3 id="workNoTop">WORK_NO:1</h3></div><nav><ul class="list"><li><a href="index.html" class="transition-link">Home</a></li><li><a href="portfolio.html" class="transition-link">Portfolio</a></li><li><a href="aboutme.html">About Designer</a></li></ul></nav><div><ul class="socials"><li><a href="#linkedin">LinkedIn</a></li><li><a href="#behance">Behance</a></li><li><a href="#mail">Mail</a></li></ul></div></div>
+<main class="container" id="portfolioScroller"><section class="section object_1" data-work="1">
+  <div class="transition-content">
+    <h1 data-assemble="WORK_NO:1">WORK_NO:1</h1>
+    <div class="content">
+      <div class="horizontal-gallery" tabindex="0" aria-label="Work 1 horizontal gallery">
+        <div class="gallery-track">
+          <article class="gallery-slide" data-slide="1">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/DL_Flyer_with_the_Keyboard.jpg" alt="WORK 1 — image 1">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 01 / PANEL 01</div>
+          <div class="gallery-hint">Scroll horizontally</div>
+        </article><article class="gallery-slide" data-slide="2">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/DL_Flyer_with_the_Keyboard.jpg" alt="WORK 1 — image 2">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 01 / PANEL 02</div>
+          
+        </article><article class="gallery-slide" data-slide="3">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/DL_Flyer_with_the_Keyboard.jpg" alt="WORK 1 — image 3">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 01 / PANEL 03</div>
+          
+        </article><article class="gallery-slide" data-slide="4">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/DL_Flyer_with_the_Keyboard.jpg" alt="WORK 1 — image 4">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 01 / PANEL 04</div>
+          
+        </article><article class="gallery-slide" data-slide="5">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/DL_Flyer_with_the_Keyboard.jpg" alt="WORK 1 — image 5">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 01 / PANEL 05</div>
+          
+        </article><article class="gallery-slide" data-slide="6">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/DL_Flyer_with_the_Keyboard.jpg" alt="WORK 1 — image 6">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 01 / PANEL 06</div>
+          
+        </article><article class="gallery-slide" data-slide="7">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/DL_Flyer_with_the_Keyboard.jpg" alt="WORK 1 — image 7">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 01 / PANEL 07</div>
+          
+        </article><article class="gallery-slide" data-slide="8">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/DL_Flyer_with_the_Keyboard.jpg" alt="WORK 1 — image 8">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 01 / PANEL 08</div>
+          
+        </article><article class="gallery-slide" data-slide="9">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/DL_Flyer_with_the_Keyboard.jpg" alt="WORK 1 — image 9">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 01 / PANEL 09</div>
+          
+        </article>
+        </div>
+      </div>
+      <div class="gallery-ui" role="tablist" aria-label="Work 1 panels"><button class="gallery-dot active" type="button" data-target="1" aria-label="Go to panel 1"></button><button class="gallery-dot" type="button" data-target="2" aria-label="Go to panel 2"></button><button class="gallery-dot" type="button" data-target="3" aria-label="Go to panel 3"></button><button class="gallery-dot" type="button" data-target="4" aria-label="Go to panel 4"></button><button class="gallery-dot" type="button" data-target="5" aria-label="Go to panel 5"></button><button class="gallery-dot" type="button" data-target="6" aria-label="Go to panel 6"></button><button class="gallery-dot" type="button" data-target="7" aria-label="Go to panel 7"></button><button class="gallery-dot" type="button" data-target="8" aria-label="Go to panel 8"></button><button class="gallery-dot" type="button" data-target="9" aria-label="Go to panel 9"></button></div>
+    </div>
+  </div>
+  <div class="section-index" aria-hidden="true">01 / 06</div>
+</section><section class="section object_2" data-work="2">
+  <div class="transition-content">
+    <h1 data-assemble="WORK_NO:2">WORK_NO:2</h1>
+    <div class="content">
+      <div class="horizontal-gallery" tabindex="0" aria-label="Work 2 horizontal gallery">
+        <div class="gallery-track">
+          <article class="gallery-slide" data-slide="1">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/backpack_linen_og.jpg" alt="WORK 2 — image 1">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 02 / PANEL 01</div>
+          <div class="gallery-hint">Scroll horizontally</div>
+        </article><article class="gallery-slide" data-slide="2">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/backpack_linen_og.jpg" alt="WORK 2 — image 2">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 02 / PANEL 02</div>
+          
+        </article><article class="gallery-slide" data-slide="3">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/backpack_linen_og.jpg" alt="WORK 2 — image 3">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 02 / PANEL 03</div>
+          
+        </article><article class="gallery-slide" data-slide="4">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/backpack_linen_og.jpg" alt="WORK 2 — image 4">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 02 / PANEL 04</div>
+          
+        </article><article class="gallery-slide" data-slide="5">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/backpack_linen_og.jpg" alt="WORK 2 — image 5">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 02 / PANEL 05</div>
+          
+        </article><article class="gallery-slide" data-slide="6">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/backpack_linen_og.jpg" alt="WORK 2 — image 6">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 02 / PANEL 06</div>
+          
+        </article><article class="gallery-slide" data-slide="7">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/backpack_linen_og.jpg" alt="WORK 2 — image 7">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 02 / PANEL 07</div>
+          
+        </article><article class="gallery-slide" data-slide="8">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/backpack_linen_og.jpg" alt="WORK 2 — image 8">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 02 / PANEL 08</div>
+          
+        </article><article class="gallery-slide" data-slide="9">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/backpack_linen_og.jpg" alt="WORK 2 — image 9">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 02 / PANEL 09</div>
+          
+        </article>
+        </div>
+      </div>
+      <div class="gallery-ui" role="tablist" aria-label="Work 2 panels"><button class="gallery-dot active" type="button" data-target="1" aria-label="Go to panel 1"></button><button class="gallery-dot" type="button" data-target="2" aria-label="Go to panel 2"></button><button class="gallery-dot" type="button" data-target="3" aria-label="Go to panel 3"></button><button class="gallery-dot" type="button" data-target="4" aria-label="Go to panel 4"></button><button class="gallery-dot" type="button" data-target="5" aria-label="Go to panel 5"></button><button class="gallery-dot" type="button" data-target="6" aria-label="Go to panel 6"></button><button class="gallery-dot" type="button" data-target="7" aria-label="Go to panel 7"></button><button class="gallery-dot" type="button" data-target="8" aria-label="Go to panel 8"></button><button class="gallery-dot" type="button" data-target="9" aria-label="Go to panel 9"></button></div>
+    </div>
+  </div>
+  <div class="section-index" aria-hidden="true">02 / 06</div>
+</section><section class="section object_3" data-work="3">
+  <div class="transition-content">
+    <h1 data-assemble="WORK_NO:3">WORK_NO:3</h1>
+    <div class="content">
+      <div class="horizontal-gallery" tabindex="0" aria-label="Work 3 horizontal gallery">
+        <div class="gallery-track">
+          <article class="gallery-slide" data-slide="1">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/road_bike_1_1.jpg" alt="WORK 3 — image 1">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 03 / PANEL 01</div>
+          <div class="gallery-hint">Scroll horizontally</div>
+        </article><article class="gallery-slide" data-slide="2">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/road_bike_1_1.jpg" alt="WORK 3 — image 2">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 03 / PANEL 02</div>
+          
+        </article><article class="gallery-slide" data-slide="3">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/road_bike_1_1.jpg" alt="WORK 3 — image 3">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 03 / PANEL 03</div>
+          
+        </article><article class="gallery-slide" data-slide="4">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/road_bike_1_1.jpg" alt="WORK 3 — image 4">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 03 / PANEL 04</div>
+          
+        </article><article class="gallery-slide" data-slide="5">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/road_bike_1_1.jpg" alt="WORK 3 — image 5">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 03 / PANEL 05</div>
+          
+        </article><article class="gallery-slide" data-slide="6">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/road_bike_1_1.jpg" alt="WORK 3 — image 6">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 03 / PANEL 06</div>
+          
+        </article><article class="gallery-slide" data-slide="7">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/road_bike_1_1.jpg" alt="WORK 3 — image 7">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 03 / PANEL 07</div>
+          
+        </article><article class="gallery-slide" data-slide="8">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/road_bike_1_1.jpg" alt="WORK 3 — image 8">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 03 / PANEL 08</div>
+          
+        </article><article class="gallery-slide" data-slide="9">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/road_bike_1_1.jpg" alt="WORK 3 — image 9">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 03 / PANEL 09</div>
+          
+        </article>
+        </div>
+      </div>
+      <div class="gallery-ui" role="tablist" aria-label="Work 3 panels"><button class="gallery-dot active" type="button" data-target="1" aria-label="Go to panel 1"></button><button class="gallery-dot" type="button" data-target="2" aria-label="Go to panel 2"></button><button class="gallery-dot" type="button" data-target="3" aria-label="Go to panel 3"></button><button class="gallery-dot" type="button" data-target="4" aria-label="Go to panel 4"></button><button class="gallery-dot" type="button" data-target="5" aria-label="Go to panel 5"></button><button class="gallery-dot" type="button" data-target="6" aria-label="Go to panel 6"></button><button class="gallery-dot" type="button" data-target="7" aria-label="Go to panel 7"></button><button class="gallery-dot" type="button" data-target="8" aria-label="Go to panel 8"></button><button class="gallery-dot" type="button" data-target="9" aria-label="Go to panel 9"></button></div>
+    </div>
+  </div>
+  <div class="section-index" aria-hidden="true">03 / 06</div>
+</section><section class="section object_4" data-work="4">
+  <div class="transition-content">
+    <h1 data-assemble="WORK_NO:4">WORK_NO:4</h1>
+    <div class="content">
+      <div class="horizontal-gallery" tabindex="0" aria-label="Work 4 horizontal gallery">
+        <div class="gallery-track">
+          <article class="gallery-slide" data-slide="1">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/skateboard_f&b.jpg" alt="WORK 4 — image 1">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 04 / PANEL 01</div>
+          <div class="gallery-hint">Scroll horizontally</div>
+        </article><article class="gallery-slide" data-slide="2">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/skateboard_f&b.jpg" alt="WORK 4 — image 2">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 04 / PANEL 02</div>
+          
+        </article><article class="gallery-slide" data-slide="3">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/skateboard_f&b.jpg" alt="WORK 4 — image 3">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 04 / PANEL 03</div>
+          
+        </article><article class="gallery-slide" data-slide="4">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/skateboard_f&b.jpg" alt="WORK 4 — image 4">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 04 / PANEL 04</div>
+          
+        </article><article class="gallery-slide" data-slide="5">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/skateboard_f&b.jpg" alt="WORK 4 — image 5">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 04 / PANEL 05</div>
+          
+        </article><article class="gallery-slide" data-slide="6">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/skateboard_f&b.jpg" alt="WORK 4 — image 6">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 04 / PANEL 06</div>
+          
+        </article><article class="gallery-slide" data-slide="7">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/skateboard_f&b.jpg" alt="WORK 4 — image 7">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 04 / PANEL 07</div>
+          
+        </article><article class="gallery-slide" data-slide="8">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/skateboard_f&b.jpg" alt="WORK 4 — image 8">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 04 / PANEL 08</div>
+          
+        </article><article class="gallery-slide" data-slide="9">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/skateboard_f&b.jpg" alt="WORK 4 — image 9">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 04 / PANEL 09</div>
+          
+        </article>
+        </div>
+      </div>
+      <div class="gallery-ui" role="tablist" aria-label="Work 4 panels"><button class="gallery-dot active" type="button" data-target="1" aria-label="Go to panel 1"></button><button class="gallery-dot" type="button" data-target="2" aria-label="Go to panel 2"></button><button class="gallery-dot" type="button" data-target="3" aria-label="Go to panel 3"></button><button class="gallery-dot" type="button" data-target="4" aria-label="Go to panel 4"></button><button class="gallery-dot" type="button" data-target="5" aria-label="Go to panel 5"></button><button class="gallery-dot" type="button" data-target="6" aria-label="Go to panel 6"></button><button class="gallery-dot" type="button" data-target="7" aria-label="Go to panel 7"></button><button class="gallery-dot" type="button" data-target="8" aria-label="Go to panel 8"></button><button class="gallery-dot" type="button" data-target="9" aria-label="Go to panel 9"></button></div>
+    </div>
+  </div>
+  <div class="section-index" aria-hidden="true">04 / 06</div>
+</section><section class="section object_5" data-work="5">
+  <div class="transition-content">
+    <h1 data-assemble="WORK_NO:5">WORK_NO:5</h1>
+    <div class="content">
+      <div class="horizontal-gallery" tabindex="0" aria-label="Work 5 horizontal gallery">
+        <div class="gallery-track">
+          <article class="gallery-slide" data-slide="1">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/chopsticks_mockup_4.jpg" alt="WORK 5 — image 1">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 05 / PANEL 01</div>
+          <div class="gallery-hint">Scroll horizontally</div>
+        </article><article class="gallery-slide" data-slide="2">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/chopsticks_mockup_4.jpg" alt="WORK 5 — image 2">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 05 / PANEL 02</div>
+          
+        </article><article class="gallery-slide" data-slide="3">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/chopsticks_mockup_4.jpg" alt="WORK 5 — image 3">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 05 / PANEL 03</div>
+          
+        </article><article class="gallery-slide" data-slide="4">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/chopsticks_mockup_4.jpg" alt="WORK 5 — image 4">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 05 / PANEL 04</div>
+          
+        </article><article class="gallery-slide" data-slide="5">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/chopsticks_mockup_4.jpg" alt="WORK 5 — image 5">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 05 / PANEL 05</div>
+          
+        </article><article class="gallery-slide" data-slide="6">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/chopsticks_mockup_4.jpg" alt="WORK 5 — image 6">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 05 / PANEL 06</div>
+          
+        </article><article class="gallery-slide" data-slide="7">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/chopsticks_mockup_4.jpg" alt="WORK 5 — image 7">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 05 / PANEL 07</div>
+          
+        </article><article class="gallery-slide" data-slide="8">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/chopsticks_mockup_4.jpg" alt="WORK 5 — image 8">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 05 / PANEL 08</div>
+          
+        </article><article class="gallery-slide" data-slide="9">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/chopsticks_mockup_4.jpg" alt="WORK 5 — image 9">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 05 / PANEL 09</div>
+          
+        </article>
+        </div>
+      </div>
+      <div class="gallery-ui" role="tablist" aria-label="Work 5 panels"><button class="gallery-dot active" type="button" data-target="1" aria-label="Go to panel 1"></button><button class="gallery-dot" type="button" data-target="2" aria-label="Go to panel 2"></button><button class="gallery-dot" type="button" data-target="3" aria-label="Go to panel 3"></button><button class="gallery-dot" type="button" data-target="4" aria-label="Go to panel 4"></button><button class="gallery-dot" type="button" data-target="5" aria-label="Go to panel 5"></button><button class="gallery-dot" type="button" data-target="6" aria-label="Go to panel 6"></button><button class="gallery-dot" type="button" data-target="7" aria-label="Go to panel 7"></button><button class="gallery-dot" type="button" data-target="8" aria-label="Go to panel 8"></button><button class="gallery-dot" type="button" data-target="9" aria-label="Go to panel 9"></button></div>
+    </div>
+  </div>
+  <div class="section-index" aria-hidden="true">05 / 06</div>
+</section><section class="section object_6" data-work="6">
+  <div class="transition-content">
+    <h1 data-assemble="WORK_NO:6">WORK_NO:6</h1>
+    <div class="content">
+      <div class="horizontal-gallery" tabindex="0" aria-label="Work 6 horizontal gallery">
+        <div class="gallery-track">
+          <article class="gallery-slide" data-slide="1">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/women's_shirt_front.jpg" alt="WORK 6 — image 1">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 06 / PANEL 01</div>
+          <div class="gallery-hint">Scroll horizontally</div>
+        </article><article class="gallery-slide" data-slide="2">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/women's_shirt_front.jpg" alt="WORK 6 — image 2">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 06 / PANEL 02</div>
+          
+        </article><article class="gallery-slide" data-slide="3">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/women's_shirt_front.jpg" alt="WORK 6 — image 3">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 06 / PANEL 03</div>
+          
+        </article><article class="gallery-slide" data-slide="4">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/women's_shirt_front.jpg" alt="WORK 6 — image 4">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 06 / PANEL 04</div>
+          
+        </article><article class="gallery-slide" data-slide="5">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/women's_shirt_front.jpg" alt="WORK 6 — image 5">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 06 / PANEL 05</div>
+          
+        </article><article class="gallery-slide" data-slide="6">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/women's_shirt_front.jpg" alt="WORK 6 — image 6">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 06 / PANEL 06</div>
+          
+        </article><article class="gallery-slide" data-slide="7">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/women's_shirt_front.jpg" alt="WORK 6 — image 7">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 06 / PANEL 07</div>
+          
+        </article><article class="gallery-slide" data-slide="8">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/women's_shirt_front.jpg" alt="WORK 6 — image 8">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 06 / PANEL 08</div>
+          
+        </article><article class="gallery-slide" data-slide="9">
+          <img class="slide-image" src="images/Branding & Identity/TerraVibe/women's_shirt_front.jpg" alt="WORK 6 — image 9">
+          <div class="slide-shade"></div>
+          <div class="slide-label">WORK 06 / PANEL 09</div>
+          
+        </article>
+        </div>
+      </div>
+      <div class="gallery-ui" role="tablist" aria-label="Work 6 panels"><button class="gallery-dot active" type="button" data-target="1" aria-label="Go to panel 1"></button><button class="gallery-dot" type="button" data-target="2" aria-label="Go to panel 2"></button><button class="gallery-dot" type="button" data-target="3" aria-label="Go to panel 3"></button><button class="gallery-dot" type="button" data-target="4" aria-label="Go to panel 4"></button><button class="gallery-dot" type="button" data-target="5" aria-label="Go to panel 5"></button><button class="gallery-dot" type="button" data-target="6" aria-label="Go to panel 6"></button><button class="gallery-dot" type="button" data-target="7" aria-label="Go to panel 7"></button><button class="gallery-dot" type="button" data-target="8" aria-label="Go to panel 8"></button><button class="gallery-dot" type="button" data-target="9" aria-label="Go to panel 9"></button></div>
+    </div>
+  </div>
+  <div class="section-index" aria-hidden="true">06 / 06</div>
+</section>
 </main>
-<div class="footer"><div><button class="work_button" type="button">Hire My Skills</button></div><div><ul class="footer_list"><li><a href="selected_works.html" class="transition-link">Selected Works</a></li><li><a class="catalog" href="catalog.html">Catalog</a></li><li><a href="#overview" class="list_portfolio">Get In Touch</a></li></ul></div><div class="copy_right"><p style="font-size:.8rem">&copy; 2026 Ramsey Asiedu</p></div></div><div class="contact_info"></div>
+<div class="footer"><div><button class="work_button" type="button">Hire My Skills</button></div><div><ul class="footer_list"><li><a href="selected_works.html" class="transition-link">Selected Works</a></li><li><a class="catalog" href="catalog.html">Catalog</a></li><li><a href="contactme.html" class="list_portfolio">Get In Touch</a></li></ul></div><div class="copy_right"><p style="font-size:.8rem">&copy; 2026 Ramsey Asiedu</p></div></div><div class="contact_info"></div>
 <script>
-const scroller=document.getElementById('portfolioScroller'),workNoTop=document.getElementById('workNoTop'),sections=[...document.querySelectorAll('.section')],reducedMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
-const navType=performance.getEntriesByType('navigation')[0]?.type;if(navType==='reload')document.body.style.animation='none';
-// Character assembly/disassembly.
-document.querySelectorAll('[data-assemble]').forEach((heading)=>{const text=heading.dataset.assemble;heading.setAttribute('aria-label',text);heading.textContent='';[...text].forEach((char,i)=>{const s=document.createElement('span');s.className='h1-char';s.setAttribute('aria-hidden','true');s.textContent=char===' '?'\u00A0':char;const a=(i*37)%360,d=90+(i*19)%90,rad=a*Math.PI/180,sr=(i%2? -1:1)*(4+(i%5)*2),ea=((a+145)%360)*Math.PI/180,ed=80+(i*17)%100;s.style.setProperty('--sx',`${(Math.cos(rad)*d).toFixed(1)}px`);s.style.setProperty('--sy',`${(Math.sin(rad)*d).toFixed(1)}px`);s.style.setProperty('--sr',`${sr}deg`);s.style.setProperty('--ex',`${(Math.cos(ea)*ed).toFixed(1)}px`);s.style.setProperty('--ey',`${(Math.sin(ea)*ed).toFixed(1)}px`);s.style.setProperty('--er',`${-sr*1.5}deg`);s.style.setProperty('--delay',`${(i*.022).toFixed(3)}s`);heading.appendChild(s)})});
-const observer=new IntersectionObserver(entries=>entries.forEach(e=>e.target.classList.toggle('visible',e.isIntersecting)),{root:scroller,threshold:.52});document.querySelectorAll('.transition-content').forEach(el=>observer.observe(el));
-function getDominantColor(img){return new Promise(resolve=>{const c=document.createElement('canvas'),x=c.getContext('2d',{willReadFrequently:true});if(!x||!img.complete||!img.naturalWidth)return resolve(null);c.width=c.height=48;try{x.drawImage(img,0,0,48,48);const p=x.getImageData(0,0,48,48).data,bins=new Map();for(let i=0;i<p.length;i+=4){if(p[i+3]<170)continue;let r=p[i],g=p[i+1],b=p[i+2],max=Math.max(r,g,b),min=Math.min(r,g,b),l=(max+min)/510;if(max<20||min>238)continue;r=Math.min(255,Math.round(r/16)*16);g=Math.min(255,Math.round(g/16)*16);b=Math.min(255,Math.round(b/16)*16);const k=`${r},${g},${b}`,w=1+(1-Math.abs(l-.5))*1.3;bins.set(k,(bins.get(k)||0)+w)}const w=[...bins.entries()].sort((a,b)=>b[1]-a[1])[0];resolve(w?Object.fromEntries(['r','g','b'].map((k,i)=>[k,Number(w[0].split(',')[i])])):null)}catch(e){resolve(null)}})}
-function rgbToHsl(r,g,b){r/=255;g/=255;b/=255;const mx=Math.max(r,g,b),mn=Math.min(r,g,b),d=mx-mn,l=(mx+mn)/2;let h=0,s=0;if(d){s=l>.5?d/(2-mx-mn):d/(mx+mn);switch(mx){case r:h=(g-b)/d+(g<b?6:0);break;case g:h=(b-r)/d+2;break;default:h=(r-g)/d+4}h/=6}return[h*360,s*100,l*100]}
-function hslToRgb(h,s,l){h=((h%360)+360)%360/360;s/=100;l/=100;if(!s){const v=Math.round(l*255);return[v,v,v]}const q=l<.5?l*(1+s):l+s-l*s,p=2*l-q,f=(p,q,t)=>{if(t<0)t+=1;if(t>1)t-=1;if(t<1/6)return p+(q-p)*6*t;if(t<1/2)return q;if(t<2/3)return p+(q-p)*(2/3-t)*6;return p};return[Math.round(f(p,q,h+1/3)*255),Math.round(f(p,q,h)*255),Math.round(f(p,q,h-1/3)*255)]}
-function lum(r,g,b){return[ r,g,b].map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)}).reduce((a,v,i)=>a+v*[.2126,.7152,.0722][i],0)}function contrast(a,b){const x=lum(...a),y=lum(...b);return(Math.max(x,y)+.05)/(Math.min(x,y)+.05)}
-function readableComplement(r,g,b){const [h,s,l]=rgbToHsl(r,g,b),bg=[r,g,b],c=[hslToRgb(h+180,Math.min(92,Math.max(48,s+15)),34),hslToRgb(h+180,Math.min(82,Math.max(38,s+8)),68),[255,255,255],[17,17,17]].filter(x=>contrast(x,bg)>=4.5).sort((a,b)=>contrast(b,bg)-contrast(a,bg));return c[0]|| (l>55?[17,17,17]:[255,255,255])}
-function setSectionColor(section,rgb){if(!rgb)return;const{r,g,b}=rgb,bg=`rgb(${r}, ${g}, ${b})`,t=readableComplement(r,g,b),th=`#${t.map(v=>v.toString(16).padStart(2,'0')).join('')}`,[h,s,l]=rgbToHsl(r,g,b),ac=hslToRgb(h+180,Math.min(88,Math.max(55,s)),Math.min(78,Math.max(42,l>50?l-10:l+15))),ah=`#${ac.map(v=>v.toString(16).padStart(2,'0')).join('')}`;section.style.setProperty('--section-bg',bg);section.style.setProperty('--text-color',th);section.style.setProperty('--muted-color',contrast(t,[r,g,b])>=7?th:'rgba(255,255,255,.82)');section.style.setProperty('--link-color',th);section.style.setProperty('--accent-color',ah);section.style.setProperty('--accent-rgb',ac.join(', '));section.style.setProperty('--accent-contrast',contrast([17,17,17],ac)>=4.5?'#111':'#fff');section.style.setProperty('--catalog-a',ah);section.style.setProperty('--catalog-b',th)}
-async function applyImageColor(section){const img=section.querySelector('img');if(!img)return;if(!img.complete)await new Promise(r=>{img.addEventListener('load',r,{once:true});img.addEventListener('error',r,{once:true})});setSectionColor(section,await getDominantColor(img))}sections.forEach(applyImageColor);
-let activeIndex=-1,scrollTick=false;function updateFromScroll(){const h=scroller.clientHeight||innerHeight,i=Math.max(0,Math.min(sections.length-1,Math.round(scroller.scrollTop/Math.max(h,1))));if(i!==activeIndex){activeIndex=i;const w=sections[i]?.dataset.work||String(i+1);workNoTop.textContent=`WORK_NO:${w}`;document.title=`WORK_NO:${w} | Portfolio`;const cs=getComputedStyle(sections[i]);['--section-bg','--text-color','--muted-color','--link-color','--accent-color','--accent-rgb','--accent-contrast','--catalog-a','--catalog-b'].forEach(v=>{const value=cs.getPropertyValue(v).trim();if(value)document.documentElement.style.setProperty(v,value)})}scrollTick=false}scroller.addEventListener('scroll',()=>{if(!scrollTick){requestAnimationFrame(updateFromScroll);scrollTick=true}},{passive:true});addEventListener('resize',updateFromScroll,{passive:true});updateFromScroll();
+const scroller=document.getElementById('portfolioScroller'),
+workNoTop=document.getElementById('workNoTop'),
+sections=[...document.querySelectorAll('.section')],
+reducedMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const navType=performance.getEntriesByType('navigation')[0]?.type;
+if(navType==='reload')document.body.style.animation='none';
+
+/* Character assembly/disassembly. */
+document.querySelectorAll('[data-assemble]').forEach((heading)=>{
+  const text=heading.dataset.assemble;
+  heading.setAttribute('aria-label',text);
+  heading.textContent='';
+  [...text].forEach((char,i)=>{
+    const s=document.createElement('span');
+    s.className='h1-char';
+    s.setAttribute('aria-hidden','true');
+    s.textContent=char===' '?'\u00A0':char;
+    const a=(i*37)%360,d=90+(i*19)%90,rad=a*Math.PI/180,sr=(i%2? -1:1)*(4+(i%5)*2),
+          ea=((a+145)%360)*Math.PI/180,ed=80+(i*17)%100;
+    s.style.setProperty('--sx',`${(Math.cos(rad)*d).toFixed(1)}px`);
+    s.style.setProperty('--sy',`${(Math.sin(rad)*d).toFixed(1)}px`);
+    s.style.setProperty('--sr',`${sr}deg`);
+    s.style.setProperty('--ex',`${(Math.cos(ea)*ed).toFixed(1)}px`);
+    s.style.setProperty('--ey',`${(Math.sin(ea)*ed).toFixed(1)}px`);
+    s.style.setProperty('--er',`${-sr*1.5}deg`);
+    s.style.setProperty('--delay',`${(i*.022).toFixed(3)}s`);
+    heading.appendChild(s);
+  });
+});
+
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>e.target.classList.toggle('visible',e.isIntersecting));
+},{root:scroller,threshold:.52});
+document.querySelectorAll('.transition-content').forEach(el=>observer.observe(el));
+
+function getDominantColor(img){
+  return new Promise(resolve=>{
+    const c=document.createElement('canvas'),
+          x=c.getContext('2d',{willReadFrequently:true});
+    if(!x||!img.complete||!img.naturalWidth)return resolve(null);
+    c.width=c.height=48;
+    try{
+      x.drawImage(img,0,0,48,48);
+      const p=x.getImageData(0,0,48,48).data,bins=new Map();
+      for(let i=0;i<p.length;i+=4){
+        if(p[i+3]<170)continue;
+        let r=p[i],g=p[i+1],b=p[i+2],max=Math.max(r,g,b),min=Math.min(r,g,b),
+            l=(max+min)/510;
+        if(max<20||min>238)continue;
+        r=Math.min(255,Math.round(r/16)*16);
+        g=Math.min(255,Math.round(g/16)*16);
+        b=Math.min(255,Math.round(b/16)*16);
+        const k=`${r},${g},${b}`,w=1+(1-Math.abs(l-.5))*1.3;
+        bins.set(k,(bins.get(k)||0)+w);
+      }
+      const w=[...bins.entries()].sort((a,b)=>b[1]-a[1])[0];
+      resolve(w?Object.fromEntries(['r','g','b'].map((k,i)=>[k,Number(w[0].split(',')[i])])):null);
+    }catch(e){resolve(null)}
+  });
+}
+function rgbToHsl(r,g,b){
+  r/=255;g/=255;b/=255;
+  const mx=Math.max(r,g,b),mn=Math.min(r,g,b),d=mx-mn,l=(mx+mn)/2;
+  let h=0,s=0;
+  if(d){
+    s=l>.5?d/(2-mx-mn):d/(mx+mn);
+    switch(mx){
+      case r:h=(g-b)/d+(g<b?6:0);break;
+      case g:h=(b-r)/d+2;break;
+      default:h=(r-g)/d+4;
+    }
+    h/=6;
+  }
+  return[h*360,s*100,l*100];
+}
+function hslToRgb(h,s,l){
+  h=((h%360)+360)%360/360;s/=100;l/=100;
+  if(!s){const v=Math.round(l*255);return[v,v,v]}
+  const q=l<.5?l*(1+s):l+s-l*s,p=2*l-q,
+        f=(p,q,t)=>{
+          if(t<0)t+=1;if(t>1)t-=1;
+          if(t<1/6)return p+(q-p)*6*t;
+          if(t<1/2)return q;
+          if(t<2/3)return p+(q-p)*(2/3-t)*6;
+          return p;
+        };
+  return[Math.round(f(p,q,h+1/3)*255),Math.round(f(p,q,h)*255),Math.round(f(p,q,h-1/3)*255)];
+}
+function lum(r,g,b){
+  return[r,g,b].map(v=>{
+    v/=255;
+    return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4);
+  }).reduce((a,v,i)=>a+v*[.2126,.7152,.0722][i],0);
+}
+function contrast(a,b){
+  const x=lum(...a),y=lum(...b);
+  return(Math.max(x,y)+.05)/(Math.min(x,y)+.05);
+}
+function readableComplement(r,g,b){
+  const [h,s,l]=rgbToHsl(r,g,b),bg=[r,g,b],
+        c=[
+          hslToRgb(h+180,Math.min(92,Math.max(48,s+15)),34),
+          hslToRgb(h+180,Math.min(82,Math.max(38,s+8)),68),
+          [255,255,255],[17,17,17]
+        ].filter(x=>contrast(x,bg)>=4.5)
+         .sort((a,b)=>contrast(b,bg)-contrast(a,bg));
+  return c[0]||(l>55?[17,17,17]:[255,255,255]);
+}
+function setSectionColor(section,rgb){
+  if(!rgb)return;
+  const{r,g,b}=rgb,bg=`rgb(${r}, ${g}, ${b})`,t=readableComplement(r,g,b),
+        th=`#${t.map(v=>v.toString(16).padStart(2,'0')).join('')}`,
+        [h,s,l]=rgbToHsl(r,g,b),
+        ac=hslToRgb(h+180,Math.min(88,Math.max(55,s)),Math.min(78,Math.max(42,l>50?l-10:l+15))),
+        ah=`#${ac.map(v=>v.toString(16).padStart(2,'0')).join('')}`;
+  section.style.setProperty('--section-bg',bg);
+  section.style.setProperty('--text-color',th);
+  section.style.setProperty('--muted-color',contrast(t,[r,g,b])>=7?th:'rgba(255,255,255,.82)');
+  section.style.setProperty('--link-color',th);
+  section.style.setProperty('--accent-color',ah);
+  section.style.setProperty('--accent-rgb',ac.join(', '));
+  section.style.setProperty('--accent-contrast',contrast([17,17,17],ac)>=4.5?'#111':'#fff');
+  section.style.setProperty('--catalog-a',ah);
+  section.style.setProperty('--catalog-b',th);
+}
+async function applyImageColor(section){
+  const img=section.querySelector('.slide-image');
+  if(!img)return;
+  if(!img.complete)await new Promise(r=>{
+    img.addEventListener('load',r,{once:true});
+    img.addEventListener('error',r,{once:true});
+  });
+  setSectionColor(section,await getDominantColor(img));
+}
+sections.forEach(applyImageColor);
+
+/* Horizontal galleries: smoother wheel navigation, drag/swipe support, and subtle parallax. */
+const galleries=[...document.querySelectorAll('.horizontal-gallery')];
+const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
+
+function setupGallery(gallery){
+  const slides=[...gallery.querySelectorAll('.gallery-slide')];
+  const dots=[...gallery.parentElement.querySelectorAll('.gallery-dot')];
+  let targetX=gallery.scrollLeft;
+  let animFrame=0;
+  let pointerDown=false;
+  let pointerStartX=0;
+  let pointerStartY=0;
+  let pointerStartScroll=0;
+  let dragAxis=null;
+
+  const resizeSlides=()=>{
+    const width=Math.max(1,gallery.clientWidth);
+    slides.forEach(slide=>{
+      slide.style.flex=`0 0 ${width}px`;
+      slide.style.width=`${width}px`;
+    });
+    targetX=clamp(gallery.scrollLeft,0,Math.max(0,gallery.scrollWidth-gallery.clientWidth));
+    update();
+  };
+
+  const setActive=(index)=>{
+    slides.forEach((slide,i)=>slide.classList.toggle('is-active',i===index));
+    dots.forEach((dot,i)=>{
+      const active=i===index;
+      dot.classList.toggle('active',active);
+      dot.setAttribute('aria-selected',String(active));
+    });
+  };
+
+  const stopAnimation=()=>{
+    if(animFrame){cancelAnimationFrame(animFrame);animFrame=0;}
+  };
+
+  const easeOutCubic=t=>1-Math.pow(1-t,3);
+
+  const smoothTo=(x)=>{
+    stopAnimation();
+    const max=Math.max(0,gallery.scrollWidth-gallery.clientWidth);
+    targetX=clamp(x,0,max);
+    const start=gallery.scrollLeft;
+    const distance=targetX-start;
+    if(Math.abs(distance)<0.5){gallery.scrollLeft=targetX;update();return;}
+    const duration=reducedMotion?1:620;
+    const startTime=performance.now();
+    const animate=now=>{
+      const t=clamp((now-startTime)/duration,0,1);
+      gallery.scrollLeft=start+distance*easeOutCubic(t);
+      if(t<1){animFrame=requestAnimationFrame(animate)}
+      else{animFrame=0;gallery.scrollLeft=targetX;update();}
+    };
+    animFrame=requestAnimationFrame(animate);
+  };
+
+  const atStart=()=>gallery.scrollLeft<=1;
+  const atEnd=()=>gallery.scrollLeft+gallery.clientWidth>=gallery.scrollWidth-1;
+
+  gallery.addEventListener('wheel',event=>{
+    const absX=Math.abs(event.deltaX), absY=Math.abs(event.deltaY);
+    if(absX>absY) return;
+    const goingUp=event.deltaY<0;
+    const leavingGallery=(goingUp&&atStart())||(!goingUp&&atEnd());
+    if(leavingGallery) return;
+    event.preventDefault();
+    const step=gallery.clientWidth*0.92;
+    smoothTo(gallery.scrollLeft+(goingUp?-step:step));
+  },{passive:false});
+
+  gallery.addEventListener('keydown',event=>{
+    if(event.key==='ArrowRight'||event.key==='PageDown'){
+      event.preventDefault();
+      smoothTo(gallery.scrollLeft+gallery.clientWidth);
+    }else if(event.key==='ArrowLeft'||event.key==='PageUp'){
+      event.preventDefault();
+      smoothTo(gallery.scrollLeft-gallery.clientWidth);
+    }else if(event.key==='Home'){
+      event.preventDefault();smoothTo(0);
+    }else if(event.key==='End'){
+      event.preventDefault();smoothTo(gallery.scrollWidth-gallery.clientWidth);
+    }
+  });
+
+  gallery.addEventListener('pointerdown',event=>{
+    if(event.pointerType==='mouse'&&event.button!==0)return;
+    stopAnimation();
+    pointerDown=true;
+    dragAxis=null;
+    pointerStartX=event.clientX;
+    pointerStartY=event.clientY;
+    pointerStartScroll=gallery.scrollLeft;
+    gallery.classList.add('dragging');
+    gallery.setPointerCapture?.(event.pointerId);
+  });
+
+  gallery.addEventListener('pointermove',event=>{
+    if(!pointerDown)return;
+    const dx=event.clientX-pointerStartX;
+    const dy=event.clientY-pointerStartY;
+    if(!dragAxis){
+      if(Math.abs(dx)<4&&Math.abs(dy)<4)return;
+      dragAxis=Math.abs(dx)>=Math.abs(dy)?'x':'y';
+    }
+    if(dragAxis!=='x')return;
+    event.preventDefault();
+    gallery.scrollLeft=pointerStartScroll-dx;
+  });
+
+  const releasePointer=event=>{
+    if(!pointerDown)return;
+    pointerDown=false;
+    gallery.classList.remove('dragging');
+    if(dragAxis==='x'){
+      const index=Math.round(gallery.scrollLeft/Math.max(1,gallery.clientWidth));
+      smoothTo(index*gallery.clientWidth);
+    }
+    gallery.releasePointerCapture?.(event.pointerId);
+    dragAxis=null;
+  };
+  gallery.addEventListener('pointerup',releasePointer);
+  gallery.addEventListener('pointercancel',releasePointer);
+  gallery.addEventListener('lostpointercapture',()=>{
+    if(pointerDown){pointerDown=false;gallery.classList.remove('dragging');dragAxis=null;}
+  });
+
+  dots.forEach((dot,index)=>dot.addEventListener('click',()=>smoothTo(index*gallery.clientWidth)));
+
+  function update(){
+    const width=Math.max(gallery.clientWidth,1);
+    const raw=gallery.scrollLeft/width;
+    const index=clamp(Math.round(raw),0,slides.length-1);
+    setActive(index);
+    slides.forEach((slide,i)=>{
+      const delta=i-raw;
+      const distance=Math.max(-1,Math.min(1,delta));
+      const x=distance*34;
+      const scale=1+Math.max(0,1-Math.abs(distance))*0.015;
+      const opacity=0.78+Math.max(0,1-Math.abs(distance))*0.22;
+      slide.style.setProperty('--px',`${x}px`);
+      slide.style.setProperty('--py',`${Math.abs(distance)*-3}px`);
+      slide.style.setProperty('--slide-scale',scale.toFixed(3));
+      slide.style.setProperty('--slide-opacity',opacity.toFixed(3));
+    });
+  }
+
+  gallery.addEventListener('scroll',()=>{
+    if(!animFrame) targetX=gallery.scrollLeft;
+    update();
+  },{passive:true});
+  addEventListener('resize',resizeSlides,{passive:true});
+  resizeSlides();
+  gallery.classList.add('ready');
+}
+
+galleries.forEach(setupGallery);
+
+/* Vertical portfolio scroll state. */
+let activeIndex=-1,scrollTick=false;
+function updateFromScroll(){
+  const h=scroller.clientHeight||innerHeight,
+        i=Math.max(0,Math.min(sections.length-1,Math.round(scroller.scrollTop/Math.max(h,1))));
+  if(i!==activeIndex){
+    activeIndex=i;
+    const w=sections[i]?.dataset.work||String(i+1);
+    workNoTop.textContent=`WORK_NO:${w}`;
+    document.title=`WORK_NO:${w} | Portfolio`;
+    const cs=getComputedStyle(sections[i]);
+    ['--section-bg','--text-color','--muted-color','--link-color','--accent-color','--accent-rgb','--accent-contrast','--catalog-a','--catalog-b']
+      .forEach(v=>{
+        const value=cs.getPropertyValue(v).trim();
+        if(value)document.documentElement.style.setProperty(v,value);
+      });
+  }
+  scrollTick=false;
+}
+scroller.addEventListener('scroll',()=>{
+  if(!scrollTick){requestAnimationFrame(updateFromScroll);scrollTick=true}
+},{passive:true});
+addEventListener('resize',updateFromScroll,{passive:true});
+updateFromScroll();
+
+if(reducedMotion){
+  document.querySelectorAll('.transition-content').forEach(el=>el.classList.add('visible'));
+}
+
 document.querySelectorAll('.transition-link').forEach(link=>link.addEventListener('click',function(e){e.preventDefault();const u=this.href;document.body.classList.add('slide-out-up');setTimeout(()=>location.href=u,500)}));if(reducedMotion)document.querySelectorAll('.transition-content').forEach(el=>el.classList.add('visible'));
-</script></body></html>
+</script>
+</body>
+</html>
